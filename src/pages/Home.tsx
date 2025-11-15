@@ -10,7 +10,7 @@ export default function Home() {
         <div className="hero-content">
           <h1>Small Pot Herbal Care</h1>
           <p className="tagline">Artisan Stained Glass Studio</p>
-          <p className="hero-note">(Add your video file to public/hero-video.mp4)</p>
+          <p className="artist-name">Lisa Stephen</p>
         </div>
       </section>
 
