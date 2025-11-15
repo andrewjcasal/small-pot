@@ -1,0 +1,176 @@
+.home {
+  width: 100%;
+}
+
+.hero {
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 50%, var(--color-background) 100%);
+  z-index: 0;
+}
+
+/* When you add a video file, uncomment this and remove hero-background */
+/*
+.hero-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 0;
+}
+*/
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(26, 20, 16, 0.65);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 2rem;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.tagline {
+  font-size: 1.25rem;
+  color: var(--color-mustard);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.hero-note {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.image-placeholder {
+  background-color: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: 4px;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+.image-placeholder .icon {
+  width: 5rem;
+  height: 5rem;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-teal);
+}
+
+.feature-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-mustard);
+  margin-bottom: 1rem;
+}
+
+.feature-card:nth-child(2) .feature-icon {
+  color: var(--color-teal);
+}
+
+.feature-card:nth-child(3) .feature-icon {
+  color: var(--color-mustard-light);
+}
+
+.feature-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.showcase {
+  padding: 4rem 2rem;
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+
+.showcase h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.showcase-item {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.showcase-item:hover {
+  transform: scale(1.02);
+}
+
+.showcase-item .image-placeholder {
+  min-height: 250px;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.showcase-item h4 {
+  padding: 1rem;
+  text-align: center;
+}

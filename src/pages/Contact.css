@@ -1,0 +1,129 @@
+.contact {
+  width: 100%;
+}
+
+.contact-hero {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(to bottom, var(--color-secondary), var(--color-background));
+  border-bottom: 1px solid var(--color-border);
+}
+
+.contact-hero h1 {
+  margin-bottom: 0.5rem;
+}
+
+.contact-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .contact-content {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+.contact-info h2 {
+  margin-bottom: 1.5rem;
+  color: var(--color-accent);
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.info-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.info-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-accent);
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.info-item h4 {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.info-item p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+}
+
+.studio-hours {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.studio-hours h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.studio-hours p {
+  margin-bottom: 0.5rem;
+}
+
+.hours-note {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.contact-form-section h2 {
+  margin-bottom: 1rem;
+  color: var(--color-accent);
+}
+
+.contact-form-section > p {
+  margin-bottom: 2rem;
+}
+
+.form-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.contact-form-placeholder {
+  background-color: var(--color-surface);
+  border: 2px dashed var(--color-border);
+  border-radius: 4px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.contact-form-placeholder h3 {
+  margin-bottom: 0.75rem;
+}
+
+.contact-form-placeholder p {
+  margin-bottom: 1.5rem;
+  color: var(--color-text-secondary);
+}
+
+.contact-form-placeholder button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+}
