@@ -10,6 +10,16 @@
     <title>Small Pot Stained Glass</title>
   </head>
   <body>
+    <!-- Hidden form for Netlify to detect -->
+    <form name="custom-request" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="description"></textarea>
+      <input type="text" name="delivery-date" />
+      <input type="text" name="referral" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
