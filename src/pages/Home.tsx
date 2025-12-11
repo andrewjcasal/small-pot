@@ -4,15 +4,27 @@ import './Home.css';
 
 export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [contactError, setContactError] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const email = formData.get('email')?.toString().trim() || '';
+    const phone = formData.get('phone')?.toString().trim() || '';
+
+    if (!email && !phone) {
+      setContactError(true);
+      return;
+    }
+
+    setContactError(false);
 
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+      body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
     })
       .then(() => setFormSubmitted(true))
       .catch((error) => console.error('Form submission error:', error));
@@ -150,7 +162,11 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <p className="form-hint">Please provide at least one contact method.</p>
+              {contactError ? (
+                <p className="form-error">Please provide at least one contact method (email or phone).</p>
+              ) : (
+                <p className="form-hint">Please provide at least one contact method.</p>
+              )}
 
               <div className="form-group">
                 <label htmlFor="description">Project Description *</label>
