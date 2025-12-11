@@ -11,7 +11,8 @@
   </head>
   <body>
     <!-- Hidden form for Netlify to detect -->
-    <form name="custom-request" netlify netlify-honeypot="bot-field" hidden>
+    <form name="custom-request" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="text" name="bot-field" />
       <input type="text" name="name" />
       <input type="email" name="email" />
       <input type="tel" name="phone" />

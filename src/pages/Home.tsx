@@ -26,7 +26,13 @@ export default function Home() {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
     })
-      .then(() => setFormSubmitted(true))
+      .then((response) => {
+        if (response.ok) {
+          setFormSubmitted(true);
+        } else {
+          console.error('Form submission failed:', response.status);
+        }
+      })
       .catch((error) => console.error('Form submission error:', error));
   };
 
