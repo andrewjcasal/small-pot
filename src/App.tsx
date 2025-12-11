@@ -2,10 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import About from './pages/About';
-import Gallery from './pages/Gallery';
-import Classes from './pages/Classes';
-import Contact from './pages/Contact';
+import Links from './pages/Links';
+import Artists from './pages/Artists';
 import './App.css';
 
 function App() {
@@ -16,10 +14,8 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/classes" element={<Classes />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/links" element={<Links />} />
+            <Route path="/artists" element={<Artists />} />
           </Routes>
         </main>
         <Footer />

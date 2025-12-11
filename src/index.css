@@ -16,9 +16,13 @@
   --color-mustard: #d4a017;
   --color-mustard-light: #e6b830;
 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  /* Typography */
+  --font-heading: 'Crimson Pro', Georgia, Garamond, serif;
+  --font-body: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  font-family: var(--font-body);
+  font-weight: 300;
   line-height: 1.6;
-  font-weight: 400;
 
   color: var(--color-text);
   background-color: var(--color-background);
@@ -54,9 +58,9 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Georgia', 'Garamond', serif;
+  font-family: var(--font-heading);
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: 0.5px;
 }
 
