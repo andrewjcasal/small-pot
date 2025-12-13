@@ -43,8 +43,8 @@ export default function Home() {
         <div className="hero-background"></div>
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1>Small Pot</h1>
-          <p className="tagline">Stained Glass Studio</p>
+          <h1>small pot</h1>
+          <p className="tagline">stained glass handcrafted in virginia</p>
           <p className="artist-name">Lisa Stephen</p>
         </div>
       </section>
