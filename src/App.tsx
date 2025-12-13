@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import posthog from 'posthog-js';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Links from './pages/Links';
@@ -9,6 +11,10 @@ import './App.css';
 function AppContent() {
   const location = useLocation();
   const hideFooter = location.pathname === '/links';
+
+  useEffect(() => {
+    posthog.capture('$pageview');
+  }, [location]);
 
   return (
     <div className="app">

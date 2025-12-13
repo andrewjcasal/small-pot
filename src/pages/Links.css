@@ -1,11 +1,12 @@
 .links-page {
-  min-height: 100vh;
+  height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 1rem;
   background: url('/ferns.jpg') center/cover no-repeat;
   position: relative;
+  overflow: hidden;
 }
 
 .links-page::before {
