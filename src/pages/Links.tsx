@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Paintbrush, ShoppingBag, Youtube, Heart } from 'lucide-react';
+import { Instagram, Paintbrush, ShoppingBag, Heart } from 'lucide-react';
 import './Links.css';
 
 interface LinkItem {
@@ -29,14 +29,8 @@ const links: LinkItem[] = [
     isExternal: true,
   },
   {
-    label: 'artists to watch',
-    url: '/artists',
-    icon: <Youtube className="link-icon" />,
-    isExternal: false,
-  },
-  {
     label: 'custom orders',
-    url: '/#request',
+    url: '/custom-orders',
     icon: <Heart className="link-icon" />,
     isExternal: false,
   },
@@ -47,6 +41,7 @@ export default function Links() {
     <div className="links-page">
       <div className="links-container">
         <div className="links-header">
+          <img src="/logo.png" alt="small pot logo" className="links-logo" />
           <h1>small pot</h1>
           <p className="links-tagline">stained glass handcrafted in virginia</p>
         </div>

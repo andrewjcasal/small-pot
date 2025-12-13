@@ -1,0 +1,160 @@
+.custom-orders-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  background-color: var(--color-background);
+}
+
+.custom-orders-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.custom-orders-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.custom-orders-header h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.custom-orders-tagline {
+  font-size: 0.875rem;
+  color: var(--color-mustard);
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.form-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+}
+
+.form-intro-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-teal);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.form-intro p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-group label {
+  font-size: 0.8125rem;
+  color: var(--color-text);
+  font-weight: 400;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.5rem 0.625rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.6;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-teal);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 500px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-hint {
+  font-size: 0.6875rem;
+  color: var(--color-text-secondary);
+  margin: -0.25rem 0 0.25rem;
+}
+
+.form-error {
+  font-size: 0.6875rem;
+  color: #ff4444;
+  margin: -0.25rem 0 0.25rem;
+}
+
+.submit-button {
+  margin-top: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+}
+
+.success-message {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-teal);
+  border-radius: 4px;
+}
+
+.success-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-teal);
+  margin-bottom: 0.75rem;
+}
+
+.success-message h3 {
+  margin-bottom: 0.5rem;
+}
+
+.success-message p {
+  margin: 0;
+  font-size: 0.875rem;
+}
