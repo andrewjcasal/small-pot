@@ -10,7 +10,7 @@ import './App.css';
 
 function AppContent() {
   const location = useLocation();
-  const hideFooter = location.pathname === '/links';
+  const hideFooter = location.pathname === '/links' || location.pathname === '/custom-orders';
 
   useEffect(() => {
     posthog.capture('$pageview');
