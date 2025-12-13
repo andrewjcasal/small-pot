@@ -6,7 +6,7 @@ import App from './App.tsx'
 
 posthog.init('phc_2Y9iMMdTWLZLDbxrNbSdtumXTrwwdKOm7clWoyKlXo2', {
   api_host: 'https://us.i.posthog.com',
-  person_profiles: 'anonymous',
+  person_profiles: 'identified_only',
 })
 
 createRoot(document.getElementById('root')!).render(
