@@ -5,12 +5,15 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Links from './pages/Links';
 import Artists from './pages/Artists';
+import Creators from './pages/Creators';
 import CustomOrders from './pages/CustomOrders';
 import './App.css';
 
+const footerlessRoutes = ['/links', '/creators', '/custom-orders'];
+
 function AppContent() {
   const location = useLocation();
-  const hideFooter = location.pathname === '/links' || location.pathname === '/custom-orders';
+  const hideFooter = footerlessRoutes.includes(location.pathname);
 
   useEffect(() => {
     posthog.capture('$pageview');
@@ -24,6 +27,7 @@ function AppContent() {
           <Route path="/home" element={<Home />} />
           <Route path="/links" element={<Links />} />
           <Route path="/artists" element={<Artists />} />
+          <Route path="/creators" element={<Creators />} />
           <Route path="/custom-orders" element={<CustomOrders />} />
         </Routes>
       </main>

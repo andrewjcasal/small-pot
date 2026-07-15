@@ -1,0 +1,194 @@
+.creators-page {
+  min-height: 100dvh;
+  padding: 2rem 1rem 3rem;
+  background: url('/ferns.jpg') center/cover no-repeat fixed;
+  position: relative;
+}
+
+.creators-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 20, 16, 0.7);
+  pointer-events: none;
+}
+
+.creators-container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ---- header ---- */
+.creators-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.creators-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  transition: color 0.3s ease;
+}
+
+.creators-back:hover {
+  color: var(--color-text);
+}
+
+.creators-back-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.creators-header h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.125rem;
+}
+
+.creators-tagline {
+  font-size: 0.75rem;
+  color: var(--color-mustard);
+  letter-spacing: 1.5px;
+  margin: 0;
+}
+
+/* ---- 3x3 grid ---- */
+.creators-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.creator-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---- photo: logo, swapping to an art sample on hover ---- */
+.creator-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+a.creator-photo:hover,
+a.creator-photo:focus-visible {
+  border-color: var(--color-teal);
+  transform: translateY(-2px);
+}
+
+a.creator-photo:focus-visible {
+  outline: 2px solid var(--color-mustard);
+  outline-offset: 2px;
+}
+
+.creator-logo,
+.creator-sample {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.4s ease;
+}
+
+/* Logos are wordmarks with their own backgrounds, so show them whole. */
+.creator-logo {
+  object-fit: contain;
+  padding: 0.5rem;
+  opacity: 1;
+}
+
+/* Samples are photos of artwork, so filling the box reads better. */
+.creator-sample {
+  object-fit: cover;
+  opacity: 0;
+}
+
+a.creator-photo:hover .creator-logo,
+a.creator-photo:focus-visible .creator-logo {
+  opacity: 0;
+}
+
+a.creator-photo:hover .creator-sample,
+a.creator-photo:focus-visible .creator-sample {
+  opacity: 1;
+}
+
+/* Fallback for a creator with no artwork on file yet. */
+.creator-initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--color-accent);
+  letter-spacing: 2px;
+}
+
+/* ---- name + socials ---- */
+.creator-name {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  margin: 0.5rem 0 0.25rem;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.creator-socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 640px) {
+  .creators-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Keep a full 7-icon row on one line in a narrower card. */
+  .creator-socials .social-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .creators-grid {
+    grid-template-columns: 1fr;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creator-photo,
+  .creator-logo,
+  .creator-sample {
+    transition: none;
+  }
+  a.creator-photo:hover,
+  a.creator-photo:focus-visible {
+    transform: none;
+  }
+}

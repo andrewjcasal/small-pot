@@ -1,0 +1,46 @@
+.social-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.social-icon img {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+  /* Source marks are black line art on transparent; force them to pure white. */
+  filter: brightness(0) invert(1);
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+}
+
+.social-icon:hover,
+.social-icon:focus-visible {
+  background-color: rgba(232, 220, 196, 0.1);
+  transform: translateY(-1px);
+}
+
+.social-icon:hover img,
+.social-icon:focus-visible img {
+  opacity: 1;
+}
+
+.social-icon:focus-visible {
+  outline: 2px solid var(--color-mustard);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-icon {
+    transition: none;
+  }
+  .social-icon:hover,
+  .social-icon:focus-visible {
+    transform: none;
+  }
+}
