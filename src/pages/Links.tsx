@@ -41,7 +41,7 @@ const links: LinkItem[] = [
   },
   {
     kind: 'link',
-    label: 'content creators',
+    label: 'inspirational glass artists',
     url: '/creators',
     icon: <Users className="link-icon" />,
     isExternal: false,

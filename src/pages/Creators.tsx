@@ -83,7 +83,7 @@ export default function Creators() {
             <ArrowLeft className="creators-back-icon" />
             <span>back</span>
           </Link>
-          <h1>content creators</h1>
+          <h1>inspirational glass artists</h1>
           <p className="creators-tagline">stained glass artists worth following</p>
         </header>
 
