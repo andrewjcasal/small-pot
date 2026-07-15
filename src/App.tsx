@@ -5,11 +5,10 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Links from './pages/Links';
 import Artists from './pages/Artists';
-import Creators from './pages/Creators';
 import CustomOrders from './pages/CustomOrders';
 import './App.css';
 
-const footerlessRoutes = ['/links', '/creators', '/custom-orders'];
+const footerlessRoutes = ['/links', '/artists', '/custom-orders'];
 
 function AppContent() {
   const location = useLocation();
@@ -27,7 +26,7 @@ function AppContent() {
           <Route path="/home" element={<Home />} />
           <Route path="/links" element={<Links />} />
           <Route path="/artists" element={<Artists />} />
-          <Route path="/creators" element={<Creators />} />
+          <Route path="/creators" element={<Navigate to="/artists" replace />} />
           <Route path="/custom-orders" element={<CustomOrders />} />
         </Routes>
       </main>

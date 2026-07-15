@@ -1,81 +1,200 @@
-.artists {
-  width: 100%;
+.artists-page {
+  min-height: 100dvh;
+  padding: 2rem 1rem 3rem;
+  background: url('/ferns.jpg') center/cover no-repeat fixed;
+  position: relative;
 }
 
-.artists-hero {
-  padding: 2.5rem 1.5rem;
-  text-align: center;
-  background: linear-gradient(to bottom, var(--color-secondary), var(--color-background));
-  border-bottom: 1px solid var(--color-border);
+.artists-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 20, 16, 0.7);
+  pointer-events: none;
 }
 
-.artists-hero h1 {
-  margin-bottom: 0.25rem;
-}
-
-.artists-hero .subtitle {
-  font-size: 0.875rem;
-  margin: 0;
-}
-
-.artists-content {
-  max-width: 700px;
+.artists-container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 1.5rem;
 }
 
-.artists-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+/* ---- header ---- */
+.artists-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  position: relative;
 }
 
-.artist-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 0.875rem 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.artist-card:hover {
-  border-color: var(--color-teal);
-}
-
-.artist-card h3 {
-  margin-bottom: 0.25rem;
-  font-size: 1rem;
-}
-
-.artist-card p {
-  margin-bottom: 0.5rem;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-}
-
-.artist-links {
-  display: flex;
-  gap: 0.375rem;
-}
-
-.artist-links a {
-  display: flex;
+.artists-back {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  background-color: var(--color-background);
-  border-radius: 4px;
+  gap: 0.25rem;
+  font-size: 0.75rem;
   color: var(--color-text-secondary);
-  transition: all 0.3s ease;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  transition: color 0.3s ease;
 }
 
-.artist-links a:hover {
-  background-color: var(--color-teal);
+.artists-back:hover {
   color: var(--color-text);
 }
 
-.artist-link-icon {
-  width: 0.875rem;
-  height: 0.875rem;
+.artists-back-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.artists-header h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.125rem;
+}
+
+.artists-tagline {
+  font-size: 0.75rem;
+  color: var(--color-mustard);
+  letter-spacing: 1.5px;
+  margin: 0;
+}
+
+/* ---- 3x3 grid ---- */
+.artists-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.artist-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---- photo: logo, swapping to an art sample on hover ---- */
+.artist-photo {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* Portrait: most samples are shot vertically, so this crops them least. */
+  aspect-ratio: 4 / 5;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-surface);
+  overflow: hidden;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+a.artist-photo:hover,
+a.artist-photo:focus-visible {
+  border-color: var(--color-teal);
+  transform: translateY(-2px);
+}
+
+a.artist-photo:focus-visible {
+  outline: 2px solid var(--color-mustard);
+  outline-offset: 2px;
+}
+
+.artist-logo,
+.artist-sample {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.4s ease;
+}
+
+/*
+ * Logos are wordmarks at wildly different aspect ratios, so `contain` shows
+ * each one whole and undistorted, growing until it meets an edge.
+ */
+.artist-logo {
+  object-fit: contain;
+  object-position: center;
+  padding: 0.375rem;
+  opacity: 1;
+}
+
+/* Samples are photos of artwork, so fill the frame from the centre. */
+.artist-sample {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+}
+
+a.artist-photo:hover .artist-logo,
+a.artist-photo:focus-visible .artist-logo {
+  opacity: 0;
+}
+
+a.artist-photo:hover .artist-sample,
+a.artist-photo:focus-visible .artist-sample {
+  opacity: 1;
+}
+
+/* Fallback for an artist with no artwork on file yet. */
+.artist-initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--color-accent);
+  letter-spacing: 2px;
+}
+
+/* ---- name + socials ---- */
+.artist-name {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  margin: 0.5rem 0 0.25rem;
+  line-height: 1.3;
+  color: var(--color-text);
+}
+
+.artist-socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.125rem;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 640px) {
+  .artists-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  /* Keep a full 7-icon row on one line in a narrower card. */
+  .artist-socials .social-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .artists-grid {
+    grid-template-columns: 1fr;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artist-photo,
+  .artist-logo,
+  .artist-sample {
+    transition: none;
+  }
+  a.artist-photo:hover,
+  a.artist-photo:focus-visible {
+    transform: none;
+  }
 }

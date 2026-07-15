@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Paintbrush, ShoppingBag, Heart, Users } from 'lucide-react';
+import { Instagram, Paintbrush, ShoppingBag, Heart, Star } from 'lucide-react';
 import './Links.css';
 
 type LinkItem =
@@ -42,8 +42,8 @@ const links: LinkItem[] = [
   {
     kind: 'link',
     label: 'inspirational glass artists',
-    url: '/creators',
-    icon: <Users className="link-icon" />,
+    url: '/artists',
+    icon: <Star className="link-icon" />,
     isExternal: false,
   },
   {

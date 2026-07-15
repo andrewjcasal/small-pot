@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import type { SocialKey } from '../data/creators';
-import { iconSrc, socialLabels } from '../data/creators';
+import type { SocialKey } from '../data/artists';
+import { iconSrc, socialLabels } from '../data/artists';
 import './SocialIcon.css';
 
 interface Props {
   kind: SocialKey;
   href: string;
-  creatorName: string;
+  artistName: string;
 }
 
-export default function SocialIcon({ kind, href, creatorName }: Props) {
+export default function SocialIcon({ kind, href, artistName }: Props) {
   const [active, setActive] = useState(false);
 
   return (
@@ -18,7 +18,7 @@ export default function SocialIcon({ kind, href, creatorName }: Props) {
       className="social-icon"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`${creatorName} on ${socialLabels[kind]}`}
+      aria-label={`${artistName} on ${socialLabels[kind]}`}
       onMouseEnter={() => setActive(true)}
       onMouseLeave={() => setActive(false)}
       onFocus={() => setActive(true)}

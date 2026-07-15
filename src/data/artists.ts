@@ -7,17 +7,17 @@ export type SocialKey =
   | 'etsy'
   | 'amazon';
 
-export interface Creator {
+export interface Artist {
   /** Display name, shown under the photo. */
   name: string;
-  /** Basename of the images in /public/creators. Null when we have no artwork yet. */
+  /** Basename of the images in /public/artists. Null when we have no artwork yet. */
   slug: string | null;
   socials: Partial<Record<SocialKey, string>>;
   /** Which social the photo itself links to. Bolded by Lisa in the source sheet. */
   primary: SocialKey;
 }
 
-export const creators: Creator[] = [
+export const artists: Artist[] = [
   {
     name: 'Sparkle and Shine Glass',
     slug: 'sparkle-and-shine',

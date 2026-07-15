@@ -1,70 +1,98 @@
-import { Youtube, Instagram, ExternalLink } from 'lucide-react';
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
+import {
+  artists,
+  socialOrder,
+  preloadAnimatedIcons,
+  type Artist,
+} from '../data/artists';
+import SocialIcon from '../components/SocialIcon';
 import './Artists.css';
 
-interface Artist {
-  name: string;
-  blurb: string;
-  youtube?: string;
-  instagram?: string;
-  website?: string;
+function ArtistCard({ artist }: { artist: Artist }) {
+  const primaryUrl = artist.socials[artist.primary];
+  const icons = socialOrder.filter((key) => artist.socials[key]);
+
+  const photo = artist.slug ? (
+    <>
+      <img
+        className="artist-logo"
+        src={`/artists/${artist.slug}-logo.webp`}
+        alt={`${artist.name} logo`}
+        loading="lazy"
+      />
+      <img
+        className="artist-sample"
+        src={`/artists/${artist.slug}-sample.webp`}
+        alt={`Stained glass by ${artist.name}`}
+        loading="lazy"
+      />
+    </>
+  ) : (
+    <span className="artist-initials" aria-hidden="true">
+      {artist.name
+        .split(' ')
+        .map((word) => word[0])
+        .join('')}
+    </span>
+  );
+
+  return (
+    <div className="artist-card">
+      {primaryUrl ? (
+        <a
+          className="artist-photo"
+          href={primaryUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={artist.name}
+        >
+          {photo}
+        </a>
+      ) : (
+        <div className="artist-photo">{photo}</div>
+      )}
+
+      <h2 className="artist-name">{artist.name}</h2>
+
+      <div className="artist-socials">
+        {icons.map((key) => (
+          <SocialIcon
+            key={key}
+            kind={key}
+            href={artist.socials[key]!}
+            artistName={artist.name}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
 
-const artists: Artist[] = [
-  {
-    name: 'Artist Name 1',
-    blurb: 'A talented stained glass artist known for intricate floral designs and vibrant color palettes.',
-    youtube: 'https://youtube.com/@example1',
-    instagram: 'https://instagram.com/example1',
-  },
-  {
-    name: 'Artist Name 2',
-    blurb: 'Contemporary glass artist specializing in geometric patterns and modern interpretations of traditional techniques.',
-    youtube: 'https://youtube.com/@example2',
-    instagram: 'https://instagram.com/example2',
-  },
-  {
-    name: 'Artist Name 3',
-    blurb: 'Master craftsperson creating stunning architectural glass installations and restoration work.',
-    instagram: 'https://instagram.com/example3',
-    website: 'https://example.com',
-  },
-];
-
 export default function Artists() {
-  return (
-    <div className="artists">
-      <section className="artists-hero">
-        <h1>Artists to Watch</h1>
-        <p className="subtitle">Talented creators inspiring the stained glass community</p>
-      </section>
+  useEffect(() => {
+    preloadAnimatedIcons(socialOrder);
+  }, []);
 
-      <section className="artists-content">
-        <div className="artists-list">
-          {artists.map((artist, index) => (
-            <div key={index} className="artist-card">
-              <h3>{artist.name}</h3>
-              <p>{artist.blurb}</p>
-              <div className="artist-links">
-                {artist.youtube && (
-                  <a href={artist.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-                    <Youtube className="artist-link-icon" />
-                  </a>
-                )}
-                {artist.instagram && (
-                  <a href={artist.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                    <Instagram className="artist-link-icon" />
-                  </a>
-                )}
-                {artist.website && (
-                  <a href={artist.website} target="_blank" rel="noopener noreferrer" aria-label="Website">
-                    <ExternalLink className="artist-link-icon" />
-                  </a>
-                )}
-              </div>
-            </div>
+  return (
+    <div className="artists-page">
+      <div className="artists-container">
+        <header className="artists-header">
+          <Link to="/links" className="artists-back">
+            <ArrowLeft className="artists-back-icon" />
+            <span>back</span>
+          </Link>
+          <h1>inspirational glass artists</h1>
+          <p className="artists-tagline">follow to learn techniques and tricks</p>
+        </header>
+
+        <div className="artists-grid">
+          {artists.map((artist) => (
+            <ArtistCard key={artist.name} artist={artist} />
           ))}
         </div>
-      </section>
+      </div>
     </div>
   );
 }
