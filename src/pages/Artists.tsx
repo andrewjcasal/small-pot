@@ -17,7 +17,7 @@ function ArtistCard({ artist }: { artist: Artist }) {
   const photo = artist.slug ? (
     <>
       <img
-        className="artist-logo"
+        className={artist.logoBleed ? 'artist-logo is-bleed' : 'artist-logo'}
         src={`/artists/${artist.slug}-logo.webp`}
         alt={`${artist.name} logo`}
         loading="lazy"

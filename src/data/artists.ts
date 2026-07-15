@@ -12,6 +12,12 @@ export interface Artist {
   name: string;
   /** Basename of the images in /public/artists. Null when we have no artwork yet. */
   slug: string | null;
+  /**
+   * True when the logo carries its own background, pre-extended to the frame's
+   * 4:5 so it bleeds edge to edge. Transparent-background logos leave this off
+   * and sit inset on the card instead.
+   */
+  logoBleed?: boolean;
   socials: Partial<Record<SocialKey, string>>;
   /** Which social the photo itself links to. Bolded by Lisa in the source sheet. */
   primary: SocialKey;
@@ -21,6 +27,7 @@ export const artists: Artist[] = [
   {
     name: 'Sparkle and Shine Glass',
     slug: 'sparkle-and-shine',
+    logoBleed: true,
     primary: 'tiktok',
     socials: {
       website: 'https://1f7526-a3.myshopify.com/',
@@ -62,6 +69,7 @@ export const artists: Artist[] = [
   {
     name: 'Curiosity Garden Glass',
     slug: 'curiosity-garden',
+    logoBleed: true,
     primary: 'instagram',
     socials: {
       website: 'https://curiositygarden.bigcartel.com',
@@ -73,6 +81,7 @@ export const artists: Artist[] = [
   {
     name: 'Amaya Jade',
     slug: 'amaya-jade',
+    logoBleed: true,
     primary: 'youtube',
     socials: {
       website:
@@ -101,6 +110,7 @@ export const artists: Artist[] = [
   {
     name: 'Lumpy Glass',
     slug: 'lumpy-glass',
+    logoBleed: true,
     primary: 'instagram',
     socials: {
       website: 'https://www.lumpyglass.com.au/',
@@ -112,6 +122,7 @@ export const artists: Artist[] = [
   {
     name: 'Linebaugh Studios',
     slug: 'linebaugh-studios',
+    logoBleed: true,
     primary: 'tiktok',
     socials: {
       website: 'https://linebaughstudios.com/',
@@ -125,6 +136,7 @@ export const artists: Artist[] = [
   {
     name: 'Sway Design Studio',
     slug: 'sway-design',
+    logoBleed: true,
     primary: 'tiktok',
     socials: {
       website: 'https://swaydesignstudio.com/',

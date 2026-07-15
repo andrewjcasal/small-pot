@@ -118,6 +118,15 @@ a.artist-photo:focus-visible {
   opacity: 1;
 }
 
+/*
+ * Logos that carry their own background are pre-extended to the frame's 4:5,
+ * so they run to the edges and the tile reads as one solid block of the
+ * brand's colour. Transparent-background logos keep the inset above.
+ */
+.artist-logo.is-bleed {
+  padding: 0;
+}
+
 /* Samples are photos of artwork, so fill the frame from the centre. */
 .artist-sample {
   object-fit: cover;
