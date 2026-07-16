@@ -31,8 +31,9 @@ const links: LinkItem[] = [
     kind: 'link',
     label: 'tiktok',
     url: 'https://www.tiktok.com/@shopsmallpot',
-    // Lucide has no TikTok mark, so this is Lisa's icons8 one, pre-tinted to
-    // --color-text so it sits level with the Lucide icons around it.
+    // Lucide has no TikTok mark. This is an icons8 one, pre-tinted to
+    // --color-text and scaled so the glyph covers 92% of its box, matching
+    // Lucide's instagram beside it.
     icon: <img src="/icons/tiktok-link.webp" alt="" className="link-icon" />,
     isExternal: true,
   },
