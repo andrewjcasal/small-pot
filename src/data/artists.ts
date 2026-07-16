@@ -13,9 +13,9 @@ export interface Artist {
   /** Basename of the images in /public/artists. Null when we have no artwork yet. */
   slug: string | null;
   /**
-   * True when the logo carries its own background, pre-extended to the frame's
-   * 4:5 so it bleeds edge to edge. Transparent-background logos leave this off
-   * and sit inset on the card instead.
+   * True when the logo image is pre-composed at the frame's 4:5 so it bleeds
+   * edge to edge. Wordmarks carry their own background; the circular badges
+   * are composited onto a field of their primary colour.
    */
   logoBleed?: boolean;
   socials: Partial<Record<SocialKey, string>>;
@@ -42,6 +42,7 @@ export const artists: Artist[] = [
   {
     name: 'Mountain Woman Products',
     slug: 'mountain-woman',
+    logoBleed: true,
     primary: 'youtube',
     socials: {
       website: 'https://www.mountainwomanproducts.com/shop/',
@@ -54,6 +55,7 @@ export const artists: Artist[] = [
   {
     name: 'Samantha Ashley Glass',
     slug: 'samantha-ashley',
+    logoBleed: true,
     primary: 'youtube',
     socials: {
       website: 'https://samanthaashleyglass.bigcartel.com/',
