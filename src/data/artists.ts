@@ -23,7 +23,12 @@ export interface Artist {
   primary: SocialKey;
 }
 
-export const artists: Artist[] = [
+/**
+ * Listed in the order of Lisa's source sheet; the grid renders them
+ * alphabetically via `artists` below, so new entries can be appended here
+ * without having to slot them into place.
+ */
+const roster: Artist[] = [
   {
     name: 'Sparkle and Shine Glass',
     slug: 'sparkle-and-shine',
@@ -150,6 +155,10 @@ export const artists: Artist[] = [
     },
   },
 ];
+
+export const artists: Artist[] = [...roster].sort((a, b) =>
+  a.name.localeCompare(b.name)
+);
 
 /** Render order for the icon row, so every card lists socials the same way. */
 export const socialOrder: SocialKey[] = [
