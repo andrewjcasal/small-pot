@@ -155,6 +155,7 @@ a.artist-photo:focus-visible .artist-sample {
   font-size: 1.75rem;
   color: var(--color-accent);
   letter-spacing: 2px;
+  text-transform: lowercase;
 }
 
 /* ---- name + socials ---- */
@@ -164,6 +165,12 @@ a.artist-photo:focus-visible .artist-sample {
   margin: 0.5rem 0 0.25rem;
   line-height: 1.3;
   color: var(--color-text);
+  /*
+   * Lowercase for display only. The names stay properly capitalised in the
+   * markup, so screen readers, alt text and search engines still get them
+   * right.
+   */
+  text-transform: lowercase;
 }
 
 .artist-socials {

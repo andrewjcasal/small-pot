@@ -29,6 +29,15 @@ const classLocations: ClassLocation[] = [
 const links: LinkItem[] = [
   {
     kind: 'link',
+    label: 'tiktok',
+    url: 'https://www.tiktok.com/@shopsmallpot',
+    // Lucide has no TikTok mark, so this is Lisa's icons8 one, pre-tinted to
+    // --color-text so it sits level with the Lucide icons around it.
+    icon: <img src="/icons/tiktok-link.webp" alt="" className="link-icon" />,
+    isExternal: true,
+  },
+  {
+    kind: 'link',
     label: 'instagram',
     url: 'https://www.instagram.com/shopsmallpot',
     icon: <Instagram className="link-icon" />,

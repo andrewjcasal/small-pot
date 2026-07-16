@@ -101,6 +101,8 @@
 .class-location {
   flex: 1;
   min-width: 0;
+  /* Lowercase for display only; the labels stay proper nouns in the markup. */
+  text-transform: lowercase;
 }
 
 @keyframes class-locations-in {
