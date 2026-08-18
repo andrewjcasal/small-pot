@@ -1,0 +1,223 @@
+/* ============================================================================
+   Small Pot - brand tokens
+   Single source of truth for color and type across the links site, print, and
+   any surface that comes later.
+
+   Every value here was sampled out of public/logo.png, the stained-glass
+   teapot. The dark ground, the brown neutrals, the mustard tagline and the
+   Crimson Pro / Lato pairing already on the site are unchanged.
+
+   HOW TO USE
+   Replace the token block at the top of src/index.css with this file's :root
+   sections (or @import it above index.css). The legacy --color-* names are all
+   aliased at the bottom, so the eight existing stylesheets keep working with no
+   edits and nothing regresses.
+
+   THEN make the four changes at the very bottom of this file. A token file
+   cannot fix a rule that pairs the wrong two properties, and the button is one
+   of those. See BRAND-KIT.md section 9.
+   ============================================================================ */
+
+:root {
+  /* --- Fern: the brand ramp. Sampled from the pot body. ----------------
+     800 and 700 are the sampled facets. 300 is the button fill, because a
+     dark-ground UI makes its primary button by inverting: light fill, dark
+     label. 400 is the lightest step that still reads as "the logo green."   */
+  --sp-fern-50: #eff7e4;
+  --sp-fern-100: #d8ecc4;
+  --sp-fern-200: #b4da8e; /* button hover fill - 12.08:1 under ink */
+  --sp-fern-300: #8cc258; /* BUTTON FILL - 9.02:1 under ink, 8.66:1 on ground */
+  --sp-fern-400: #66a335; /* accent text on dark - 5.95:1 */
+  --sp-fern-500: #4a7f1e;
+  --sp-fern-600: #356013;
+  --sp-fern-700: #28440c; /* SAMPLED - pot lit facet */
+  --sp-fern-800: #1c3008; /* SAMPLED - pot deep facet, and the came lines.
+                             This is the one-color print green. */
+  --sp-fern-900: #0e1a04;
+
+  /* --- Oak: warm neutrals. Sampled from the wooden handle (#483010), which
+         sits within three points of the --color-secondary already in the CSS.
+         The ground and surface are unchanged from what is published.       */
+  --sp-ground: #1a1410; /* page ground - published, unchanged */
+  --sp-surface: #2a2218; /* cards, inputs, buttons - published, unchanged */
+  --sp-text: #e8dcc4; /* 13.43:1 on ground - published, unchanged */
+  --sp-text-muted: #c4b5a0; /* 9.09:1 on ground - published, unchanged */
+  --sp-link: #bfa070; /* 7.36:1. REPLACES #8b6f47, which was 3.88:1 */
+  --sp-oak: #483010; /* SAMPLED - the handle. Print and fills */
+  --sp-ink: #141005; /* text ON any light fill. Never #000 */
+
+  /* Two border tokens, because they answer to different rules. A divider is
+     decorative and may sit at 1.7:1. The boundary of a control (input, button)
+     needs 3:1 under WCAG 1.4.11, and #4a3c2a reaches 1.47:1 on surface. */
+  --sp-hairline: #4a3c2a; /* dividers, section rules - published, unchanged */
+  --sp-control-border: #8a7660; /* inputs and buttons - 3.61:1 on surface */
+
+  /* --- Sparkle: the four stars in the logo, plus the mustard already on the
+         tagline. AMBER IS A DARK-GROUND COLOR: sparkle-700 on the pale ground
+         measures 2.95:1 and fails. On anything light, type goes fern or oak. */
+  --sp-sparkle-400: #f8e834; /* SAMPLED - the sparkles. Graphic device only */
+  --sp-sparkle-500: #e6b830;
+  --sp-sparkle-600: #d4a017; /* published - taglines, focus ring. 7.68:1 */
+  --sp-sparkle-700: #b8860b;
+
+  /* --- Wine: the flower. The only warm color in the mark, and it appears
+         nowhere in the current CSS. 800 is a FILL, not a text color: 1.61:1
+         as text on the ground, but 8.35:1 under cream text as a fill.      */
+  --sp-wine-300: #e0a3b0; /* 8.72:1 on ground */
+  --sp-wine-400: #c97385; /* the text step on dark - 5.45:1 */
+  --sp-wine-500: #b04a63; /* large type and non-text only - 3.48:1 */
+  --sp-wine-600: #8a3149;
+  --sp-wine-800: #642438; /* SAMPLED - the flower. Fills, tags, print */
+
+  /* --- Pane: the pale glass, ~40% of the logo. The light ground, for the
+         surfaces the dark site does not cover: print, hang tags, email.    */
+  --sp-pane: #eaf6f6; /* SAMPLED */
+  --sp-pane-bright: #f6fcfc; /* SAMPLED */
+
+  /* --- Semantic. Separate from brand color, on purpose.
+         Error replaces two hardcoded #ff4444. #ff4444 was not failing
+         contrast (5.35:1); it is a stock web red in a warm palette, written
+         by hand into two stylesheets. Never let wine mean "error" - wine
+         means Small Pot.                                                    */
+  --sp-error: #e8705f; /* 6.00:1 on ground */
+  --sp-success: #8cc258; /* 8.66:1 on ground */
+
+  /* --- Type. Both faces stay; the problems were settings, not families.
+         On a dark ground add one weight step: light strokes bleed outward
+         into the dark and read thinner than the same type on paper. Crimson
+         Pro is a high-contrast old-style face and feels this most.
+         FLOOR OF 400, EVERYWHERE. font-weight: 300 is used twice today.    */
+  --sp-font-display: "Crimson Pro", Georgia, "Iowan Old Style", serif;
+  --sp-font-body: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+
+  --sp-radius: 4px; /* published, unchanged */
+}
+
+/* ----------------------------------------------------------------------------
+   Legacy aliases. Every --color-* name the eight existing stylesheets use,
+   mapped onto the tokens above. Dropping this file in changes no other file
+   and regresses nothing.
+
+   Two renames worth knowing:
+   - --color-teal is a moss green, not a teal. It is --sp-fern-* now.
+   - --color-accent was failing as a link color at 3.88:1 and is raised here.
+   ------------------------------------------------------------------------- */
+:root {
+  --color-background: var(--sp-ground);
+  --color-surface: var(--sp-surface);
+  --color-text: var(--sp-text);
+  --color-text-secondary: var(--sp-text-muted);
+  --color-border: var(--sp-hairline);
+  --color-control-border: var(--sp-control-border); /* new */
+
+  --color-primary: #2d1810; /* published, unchanged */
+  --color-secondary: var(--sp-oak); /* was #4a2c1a, now the sampled handle */
+  --color-accent: var(--sp-link); /* was #8b6f47 at 3.88:1 */
+  --color-hover: #5e4430; /* published, unchanged */
+
+  /* Held at DARK fern so the existing `cream text on --color-teal` rules do
+     not regress on a bare drop-in (cream on #28440c is 8.04:1). This is a
+     holding position, not the intended button. See the block below. */
+  --color-teal: var(--sp-fern-700);
+  --color-teal-light: var(--sp-fern-800); /* hover goes darker, 10.48:1 */
+
+  --color-mustard: var(--sp-sparkle-600);
+  --color-mustard-light: var(--sp-sparkle-500);
+
+  --color-error: var(--sp-error);
+
+  --font-heading: var(--sp-font-display);
+  --font-body: var(--sp-font-body);
+}
+
+/* ----------------------------------------------------------------------------
+   Numbers that stack in columns need tabular figures. Class times, dates,
+   prices and dimensions all do. Proportional digits make a list of times look
+   uneven.
+   ------------------------------------------------------------------------- */
+.sp-time,
+.sp-price,
+.sp-dimension {
+  font-variant-numeric: tabular-nums;
+}
+
+.sp-label {
+  font-family: var(--sp-font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ============================================================================
+   THE FOUR CHANGES THIS FILE CANNOT MAKE FOR YOU
+
+   Each one pairs two properties, so a token cannot fix it alone. Paste these
+   over the matching rules.
+   ============================================================================ */
+
+/* 1. THE BUTTON. Today: cream #e8dcc4 on green #6b8e4e = 2.76:1, and the hover
+      lightens the fill to #7fa85f which drops it to 2.02:1. Hover making
+      contrast worse is backwards.
+
+      Cream on green cannot survive a lighten-on-hover at all: every green light
+      enough to look "hovered" is too light to hold cream text. So the fill
+      inverts. Light fern, ink label, and hover gets lighter AND higher
+      contrast, the way it should. (src/index.css)                            */
+button {
+  background-color: var(--sp-fern-300);
+  border: 1px solid var(--sp-fern-300);
+  color: var(--sp-ink); /* 9.02:1 */
+}
+button:hover {
+  background-color: var(--sp-fern-200);
+  border-color: var(--sp-fern-200);
+  color: var(--sp-ink); /* 12.08:1 */
+}
+
+/* 2. THE LINK BUTTON on /links, which is the landing page and the most-used
+      object in the brand. Same inversion on hover. (src/pages/Links.css)     */
+.link-button {
+  border: 1px solid var(--sp-control-border); /* was --color-border, 1.47:1 */
+}
+.link-button:hover {
+  background-color: var(--sp-fern-300);
+  border-color: var(--sp-fern-300);
+  color: var(--sp-ink);
+}
+
+/* 3. FOCUS. Buttons are filled, and no single-color ring passes on both the
+      dark ground and a light green fill: mustard on fern-300 is 1.13:1, so
+      keyboard focus is invisible today on the one control people use.
+      Two rings, and one of them always has contrast wherever it lands.
+      (src/index.css, plus the input:focus rules that set outline: none)      */
+:focus-visible {
+  outline: 2px solid var(--sp-ink);
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--sp-sparkle-600);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--sp-fern-400);
+  outline: 2px solid var(--sp-ink);
+  box-shadow: 0 0 0 4px var(--sp-sparkle-600);
+}
+
+/* 4. FORM FIELDS need a 3:1 boundary like any other control.
+      (src/pages/CustomOrders.css and src/pages/Home.css)                     */
+.form-group input,
+.form-group textarea {
+  border: 1px solid var(--sp-control-border);
+}
+
+/* Also, three one-word replacements:
+   - Footer.css          color: #8a8272  ->  var(--color-text-secondary)
+                         (#8a8272 is 4.12:1, under AA, and hardcoded)
+   - Home.css            color: #ff4444  ->  var(--sp-error)
+   - CustomOrders.css    color: #ff4444  ->  var(--sp-error)
+
+   And two deletions:
+   - Home.css lines 46 and 53: the text-shadow rules. They are compensating
+     for a gradient that the 65% overlay already flattened.
+   - font-weight: 300 (two uses) -> 400. Floor of 400 on a dark ground.       */
