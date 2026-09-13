@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { ChevronDown, ChevronUp, Plus, Trash2, Upload } from 'lucide-react';
-import type { NewsletterColumn, NewsletterSection, SectionKind } from '../../lib/newsletter-template';
+import type { NewsletterColumn, NewsletterIconLink, NewsletterSection, SectionKind } from '../../lib/newsletter-template';
 import { ApiError, uploadImage } from './api';
 import ImageField from './ImageField';
 import ColumnEditor from './ColumnEditor';
+import IconLinkEditor from './IconLinkEditor';
 
 interface SectionEditorProps {
   section: NewsletterSection;
@@ -25,6 +26,7 @@ const KIND_LABELS: Record<SectionKind, string> = {
 };
 
 const MAX_COLUMNS = 8;
+const MAX_ICON_LINKS = 6;
 
 export default function SectionEditor({
   section,
@@ -71,6 +73,21 @@ export default function SectionEditor({
   const addColumn = () => {
     if (columns.length >= MAX_COLUMNS) return;
     onChange(index, { columns: [...columns, { iconUrl: '', heading: '', body: '', linkUrl: '' }] });
+  };
+
+  const iconLinks = section.iconLinks ?? [];
+
+  const updateIconLink = (linkIndex: number, patch: Partial<NewsletterIconLink>) => {
+    onChange(index, { iconLinks: iconLinks.map((l, i) => (i === linkIndex ? { ...l, ...patch } : l)) });
+  };
+
+  const removeIconLink = (linkIndex: number) => {
+    onChange(index, { iconLinks: iconLinks.filter((_, i) => i !== linkIndex) });
+  };
+
+  const addIconLink = () => {
+    if (iconLinks.length >= MAX_ICON_LINKS) return;
+    onChange(index, { iconLinks: [...iconLinks, { iconUrl: '', url: '', alt: '' }] });
   };
 
   return (
@@ -196,6 +213,32 @@ export default function SectionEditor({
                 onChange={(e) => onChange(index, { linkUrl: e.target.value })}
               />
             </label>
+          </div>
+
+          <div className="admin-columns">
+            <div className="admin-column-list-head">
+              <span>icon links</span>
+              <button
+                type="button"
+                className="admin-btn-ghost"
+                disabled={disabled || iconLinks.length >= MAX_ICON_LINKS}
+                onClick={addIconLink}
+              >
+                <Plus size={14} />
+                add icon link
+              </button>
+            </div>
+            {iconLinks.map((link, linkIndex) => (
+              <IconLinkEditor
+                key={linkIndex}
+                link={link}
+                index={linkIndex}
+                disabled={disabled}
+                onChange={updateIconLink}
+                onRemove={removeIconLink}
+                onUnauthorized={onUnauthorized}
+              />
+            ))}
           </div>
         </>
       )}

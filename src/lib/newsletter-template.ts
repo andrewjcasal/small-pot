@@ -26,6 +26,13 @@ export interface NewsletterColumn {
   linkUrl?: string;
 }
 
+/** A small clickable image (a Spotify button, a podcast logo) shown in a horizontal row under a section's text. */
+export interface NewsletterIconLink {
+  iconUrl: string;
+  url: string;
+  alt?: string;
+}
+
 export interface NewsletterSection {
   /** row (photo beside text, default), band (big title bar), gallery (photo grid), columns (icon + text blocks). */
   kind?: SectionKind;
@@ -41,6 +48,8 @@ export interface NewsletterSection {
   /** Rendered as a copper button under the text. Rows only. */
   linkLabel?: string;
   linkUrl?: string;
+  /** Clickable icons in a horizontal row under the text (podcast platforms). Rows only. */
+  iconLinks?: NewsletterIconLink[];
   /** Photo URLs for a gallery section, two per row. */
   gallery?: string[];
   /** Blocks for a columns section, two per row. */
@@ -99,6 +108,8 @@ export const COLORS = {
   bandText: '#595f1c',
   cream: '#fff7e7',
   copper: '#b87333',
+  /** Lighter copper for the resource card bodies. */
+  copperLight: '#c98f5e',
   ink: '#050504',
 } as const;
 
@@ -176,6 +187,19 @@ function row(s: NewsletterSection, index: number): string {
   }
   if (s.body?.trim()) text.push(paragraphs(s.body));
   if (s.linkLabel?.trim() && s.linkUrl?.trim()) text.push(button(s.linkLabel, s.linkUrl));
+  const icons = (s.iconLinks ?? []).filter((l) => l.iconUrl?.trim() && l.url?.trim());
+  if (icons.length) {
+    const cells = icons
+      .map(
+        (l) =>
+          `<td style="padding:0 6px;"><a href="${safeUrl(l.url)}" style="display:inline-block;text-decoration:none;">` +
+          `<img src="${safeUrl(l.iconUrl)}" alt="${escapeAttr(l.alt ?? '')}" height="44" style="display:block;height:44px;width:auto;border:0;"></a></td>`,
+      )
+      .join('');
+    text.push(
+      `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:6px auto 0;"><tr>${cells}</tr></table>`,
+    );
+  }
 
   const textCell =
     `<td class="sp-col" dir="ltr" valign="middle" width="${hasImage ? '55%' : '100%'}" ` +
@@ -200,7 +224,7 @@ function band(s: NewsletterSection): string {
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0;">` +
     `<tr><td class="sp-pad" bgcolor="${COLORS.band}" style="background-color:${COLORS.band};padding:22px 24px;">` +
-    `<div class="sp-band" style="font-family:${FONT};font-size:44px;line-height:0.95;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;color:${COLORS.bandText};text-align:center;">${escapeHtml(label)}</div>` +
+    `<div class="sp-band" style="font-family:${FONT};font-size:56px;line-height:0.95;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;color:${COLORS.bandText};text-align:center;">${escapeHtml(label)}</div>` +
     `</td></tr></table>`
   );
 }
@@ -229,7 +253,11 @@ function gallery(urls: string[]): string {
   );
 }
 
-/** Icon + heading + text blocks, two per row (four across is too tight on a phone). */
+/**
+ * Resource cards, two per row (four across is too tight on a phone). Each card
+ * is a copper header holding the title, then a lighter-copper body with the
+ * description and the icon under it. Cream text throughout.
+ */
 function columns(items: NewsletterColumn[]): string {
   const clean = items.filter((c) => (c.heading ?? '').trim() || (c.body ?? '').trim());
   if (!clean.length) return '';
@@ -239,19 +267,20 @@ function columns(items: NewsletterColumn[]): string {
     const cells = pair.map((c, j) => {
       const heading = escapeHtml((c.heading ?? '').trim());
       const headingHtml = c.linkUrl?.trim()
-        ? `<a href="${safeUrl(c.linkUrl)}" style="color:${COLORS.ink};text-decoration:underline;">${heading}</a>`
+        ? `<a href="${safeUrl(c.linkUrl)}" style="color:${COLORS.cream};text-decoration:underline;">${heading}</a>`
         : heading;
       const icon = c.iconUrl?.trim()
-        ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px;">` +
-          `<tr><td align="center" bgcolor="${COLORS.copper}" style="background-color:${COLORS.copper};border-radius:8px;padding:14px 18px;">` +
-          `<img src="${safeUrl(c.iconUrl)}" alt="" height="56" style="display:block;height:56px;width:auto;max-width:100%;border:0;margin:0 auto;"></td></tr></table>`
+        ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="56" style="display:block;height:56px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
         : '';
-      return (
-        `<td width="50%" valign="top" style="width:50%;padding:${j === 0 ? '0 8px 20px 0' : '0 0 20px 8px'};">${icon}` +
-        `<p style="margin:0 0 8px;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.ink};text-align:center;">${headingHtml}</p>` +
-        (c.body?.trim() ? paragraphs(c.body, `margin:0 0 8px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`) : '') +
-        `</td>`
-      );
+      const card =
+        `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">` +
+        `<tr><td align="center" bgcolor="${COLORS.copper}" style="background-color:${COLORS.copper};border-radius:8px 8px 0 0;padding:12px 14px;">` +
+        `<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p></td></tr>` +
+        `<tr><td align="center" valign="top" bgcolor="${COLORS.copperLight}" style="background-color:${COLORS.copperLight};border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
+        (c.body?.trim() ? paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`) : '') +
+        icon +
+        `</td></tr></table>`;
+      return `<td width="50%" valign="top" style="width:50%;padding:${j === 0 ? '0 8px 16px 0' : '0 0 16px 8px'};">${card}</td>`;
     });
     if (pair.length === 1) cells.push(`<td width="50%" style="width:50%;padding:0 0 20px 8px;"></td>`);
     rows.push(`<tr>${cells.join('')}</tr>`);
@@ -379,7 +408,7 @@ export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOpt
     .sp-container { width:100% !important; }
     .sp-col { display:block !important; width:100% !important; box-sizing:border-box !important; padding:10px 20px !important; }
     .sp-pad { padding-left:16px !important; padding-right:16px !important; }
-    .sp-band { font-size:34px !important; }
+    .sp-band { font-size:40px !important; }
   }
 </style>
 </head>
@@ -429,6 +458,8 @@ export function renderNewsletterText(content: NewsletterContent, opts: RenderOpt
     if (s.heading?.trim() || s.subheading?.trim()) lines.push('');
     if (s.body?.trim()) lines.push(s.body.trim(), '');
     if (s.linkUrl?.trim() && s.linkLabel?.trim()) lines.push(`${s.linkLabel.trim()}: ${s.linkUrl.trim()}`, '');
+    for (const l of s.iconLinks ?? []) if (l.url?.trim()) lines.push(`${(l.alt ?? 'link').trim()}: ${l.url.trim()}`);
+    if (s.iconLinks?.length) lines.push('');
   }
   if (content.ctaLabel?.trim() && content.ctaUrl?.trim()) lines.push(`${content.ctaLabel.trim()}: ${content.ctaUrl.trim()}`, '');
   for (const l of [content.signoffLine, content.signoff, content.signoffSub]) if (l?.trim()) lines.push(l.trim());
@@ -472,6 +503,6 @@ export function blankSection(kind: SectionKind = 'row'): NewsletterSection {
     case 'columns':
       return { kind, columns: [{ iconUrl: '', heading: '', body: '', linkUrl: '' }] };
     default:
-      return { kind: 'row', heading: '', subheading: '', body: '', imageUrl: '', imageAlt: '', imageSide: 'auto', linkLabel: '', linkUrl: '' };
+      return { kind: 'row', heading: '', subheading: '', body: '', imageUrl: '', imageAlt: '', imageSide: 'auto', linkLabel: '', linkUrl: '', iconLinks: [] };
   }
 }

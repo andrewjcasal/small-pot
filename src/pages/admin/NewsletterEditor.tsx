@@ -34,6 +34,7 @@ function contentFrom(n: Newsletter): NewsletterContent {
       ...s,
       gallery: s.gallery ? [...s.gallery] : s.gallery,
       columns: s.columns ? s.columns.map((c) => ({ ...c })) : s.columns,
+      iconLinks: s.iconLinks ? s.iconLinks.map((l) => ({ ...l })) : s.iconLinks,
     })),
     ctaLabel: n.ctaLabel ?? '',
     ctaUrl: n.ctaUrl ?? '',
