@@ -6,9 +6,11 @@ import Home from './pages/Home';
 import Links from './pages/Links';
 import Artists from './pages/Artists';
 import CustomOrders from './pages/CustomOrders';
+import NewsletterSignup from './pages/NewsletterSignup';
+import Admin from './pages/admin/Admin';
 import './App.css';
 
-const footerlessRoutes = ['/links', '/artists', '/custom-orders'];
+const footerlessRoutes = ['/links', '/artists', '/custom-orders', '/newsletter', '/admin'];
 
 function AppContent() {
   const location = useLocation();
@@ -28,6 +30,8 @@ function AppContent() {
           <Route path="/artists" element={<Artists />} />
           <Route path="/creators" element={<Navigate to="/artists" replace />} />
           <Route path="/custom-orders" element={<CustomOrders />} />
+          <Route path="/newsletter" element={<NewsletterSignup />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
       {!hideFooter && <Footer />}

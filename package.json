@@ -5,16 +5,21 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:netlify": "netlify dev",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.0.3",
+    "@netlify/functions": "^6.0.0",
+    "@supabase/supabase-js": "^2.116.0",
     "lucide-react": "^0.553.0",
     "posthog-js": "^1.306.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.9.6"
+    "react-router-dom": "^7.9.6",
+    "resend": "^6.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
