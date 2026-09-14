@@ -261,35 +261,44 @@ function gallery(urls: string[]): string {
 function columns(items: NewsletterColumn[]): string {
   const clean = items.filter((c) => (c.heading ?? '').trim() || (c.body ?? '').trim());
   if (!clean.length) return '';
-  const rows: string[] = [];
+  // Each pair of cards is ONE table with two rows (headers, then bodies) and a
+  // transparent gap column, so both cards in a pair are always the same height.
+  const headerCell = (c: NewsletterColumn): string => {
+    const heading = escapeHtml((c.heading ?? '').trim());
+    const headingHtml = c.linkUrl?.trim()
+      ? `<a href="${safeUrl(c.linkUrl)}" style="color:${COLORS.cream};text-decoration:underline;">${heading}</a>`
+      : heading;
+    return (
+      `<td width="48%" align="center" valign="middle" bgcolor="${COLORS.copper}" style="width:48%;background-color:${COLORS.copper};border-radius:8px 8px 0 0;padding:12px 14px;">` +
+      `<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p></td>`
+    );
+  };
+  const bodyCell = (c: NewsletterColumn): string => {
+    const icon = c.iconUrl?.trim()
+      ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="56" style="display:block;height:56px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
+      : '';
+    return (
+      `<td width="48%" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:48%;background-color:${COLORS.copperLight};border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
+      (c.body?.trim() ? paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`) : '') +
+      icon +
+      `</td>`
+    );
+  };
+  const gap = `<td width="4%" style="width:4%;font-size:0;line-height:0;">&nbsp;</td>`;
+  const empty = `<td width="48%" style="width:48%;"></td>`;
+  const pairs: string[] = [];
   for (let i = 0; i < clean.length; i += 2) {
-    const pair = clean.slice(i, i + 2);
-    const cells = pair.map((c, j) => {
-      const heading = escapeHtml((c.heading ?? '').trim());
-      const headingHtml = c.linkUrl?.trim()
-        ? `<a href="${safeUrl(c.linkUrl)}" style="color:${COLORS.cream};text-decoration:underline;">${heading}</a>`
-        : heading;
-      const icon = c.iconUrl?.trim()
-        ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="56" style="display:block;height:56px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
-        : '';
-      const card =
-        `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">` +
-        `<tr><td align="center" bgcolor="${COLORS.copper}" style="background-color:${COLORS.copper};border-radius:8px 8px 0 0;padding:12px 14px;">` +
-        `<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p></td></tr>` +
-        `<tr><td align="center" valign="top" bgcolor="${COLORS.copperLight}" style="background-color:${COLORS.copperLight};border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
-        (c.body?.trim() ? paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`) : '') +
-        icon +
-        `</td></tr></table>`;
-      return `<td width="50%" valign="top" style="width:50%;padding:${j === 0 ? '0 8px 16px 0' : '0 0 16px 8px'};">${card}</td>`;
-    });
-    if (pair.length === 1) cells.push(`<td width="50%" style="width:50%;padding:0 0 20px 8px;"></td>`);
-    rows.push(`<tr>${cells.join('')}</tr>`);
+    const [a, b] = clean.slice(i, i + 2);
+    pairs.push(
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;">` +
+        `<tr>${headerCell(a)}${gap}${b ? headerCell(b) : empty}</tr>` +
+        `<tr>${bodyCell(a)}${gap}${b ? bodyCell(b) : empty}</tr>` +
+        `</table>`,
+    );
   }
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0;">` +
-    `<tr><td class="sp-pad" style="padding:12px 24px;">` +
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>${rows.join('')}</tbody></table>` +
-    `</td></tr></table>`
+    `<tr><td class="sp-pad" style="padding:12px 24px;">${pairs.join('')}</td></tr></table>`
   );
 }
 
