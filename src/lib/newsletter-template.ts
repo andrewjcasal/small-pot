@@ -163,15 +163,21 @@ function button(label: string, url: string): string {
   );
 }
 
-function img(url: string, alt: string, width: number, extraStyle = ''): string {
-  return (
+/**
+ * Every sizeable photo is wrapped in a link. Gmail adds a hover "download"
+ * button to large images that are not linked (it treats them as attachments);
+ * linked images and small icons are left alone, which is why other newsletters
+ * do not show it.
+ */
+function img(url: string, alt: string, width: number, extraStyle = '', href?: string): string {
+  const tag =
     `<img src="${safeUrl(url)}" alt="${escapeAttr(alt)}" width="${width}" ` +
-    `style="display:block;width:100%;max-width:${width}px;height:auto;border:0;${extraStyle}">`
-  );
+    `style="display:block;width:100%;max-width:${width}px;height:auto;border:0;${extraStyle}">`;
+  return href ? `<a href="${safeUrl(href)}" style="display:block;text-decoration:none;">${tag}</a>` : tag;
 }
 
 /** Photo beside text. On a phone the two cells stack, photo first. */
-function row(s: NewsletterSection, index: number): string {
+function row(s: NewsletterSection, index: number, siteUrl: string): string {
   const side = s.imageSide && s.imageSide !== 'auto' ? s.imageSide : index % 2 === 0 ? 'left' : 'right';
   const hasImage = Boolean(s.imageUrl?.trim());
   const text: string[] = [];
@@ -206,7 +212,7 @@ function row(s: NewsletterSection, index: number): string {
     `style="width:${hasImage ? '55%' : '100%'};padding:12px 24px;">${text.join('\n')}</td>`;
   const imageCell = hasImage
     ? `<td class="sp-col" dir="ltr" valign="middle" width="45%" style="width:45%;padding:12px 24px;">` +
-      `${img(s.imageUrl as string, s.imageAlt ?? '', 246, 'margin:0 auto;')}</td>`
+      `${img(s.imageUrl as string, s.imageAlt ?? '', 246, 'margin:0 auto;', s.linkUrl?.trim() || siteUrl)}</td>`
     : '';
   // dir="rtl" flips the visual order on desktop while the DOM keeps the photo first,
   // so a phone always stacks photo-then-text.
@@ -230,7 +236,7 @@ function band(s: NewsletterSection): string {
 }
 
 /** Two-column photo grid. Stays two-up on phones. */
-function gallery(urls: string[]): string {
+function gallery(urls: string[], siteUrl: string): string {
   const clean = urls.map((u) => u.trim()).filter(Boolean);
   if (!clean.length) return '';
   const cellWidth = Math.floor((CONTAINER - 48 - 16) / 2);
@@ -240,7 +246,7 @@ function gallery(urls: string[]): string {
     const cells = pair.map(
       (u, j) =>
         `<td width="50%" valign="top" style="width:50%;padding:${j === 0 ? '0 8px 16px 0' : '0 0 16px 8px'};">` +
-        `${img(u, '', cellWidth)}</td>`,
+        `${img(u, '', cellWidth, '', siteUrl)}</td>`,
     );
     if (pair.length === 1) cells.push(`<td width="50%" style="width:50%;padding:0 0 16px 8px;"></td>`);
     rows.push(`<tr>${cells.join('')}</tr>`);
@@ -302,20 +308,20 @@ function columns(items: NewsletterColumn[]): string {
   );
 }
 
-function section(s: NewsletterSection, rowIndex: number): string {
+function section(s: NewsletterSection, rowIndex: number, siteUrl: string): string {
   switch (s.kind ?? 'row') {
     case 'band':
       return band(s);
     case 'gallery':
-      return gallery(s.gallery ?? []);
+      return gallery(s.gallery ?? [], siteUrl);
     case 'columns':
       return columns(s.columns ?? []);
     default:
-      return row(s, rowIndex);
+      return row(s, rowIndex, siteUrl);
   }
 }
 
-function signoffBlock(content: NewsletterContent): string {
+function signoffBlock(content: NewsletterContent, siteUrl: string): string {
   const line = (content.signoffLine ?? '').trim();
   const name = (content.signoff ?? '').trim();
   const sub = (content.signoffSub ?? '').trim();
@@ -326,7 +332,7 @@ function signoffBlock(content: NewsletterContent): string {
     (name ? `<p style="${monoStyle}font-size:18px;line-height:1.5;">${escapeHtml(name)}</p>` : '') +
     (sub ? `<p style="${monoStyle}font-size:16px;line-height:1.5;">${escapeHtml(sub)}</p>` : '');
   const picture = content.signoffImageUrl?.trim()
-    ? `<td width="45%" valign="middle" style="width:45%;padding:0 12px 0 0;">${img(content.signoffImageUrl, '', 240)}</td>`
+    ? `<td width="45%" valign="middle" style="width:45%;padding:0 12px 0 0;">${img(content.signoffImageUrl, '', 240, '', siteUrl)}</td>`
     : '';
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 0;">` +
@@ -356,12 +362,13 @@ function footer(content: NewsletterContent, unsubscribeUrl: string): string {
 
 export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOptions): string {
   const unsubscribeUrl = safeUrl(opts.unsubscribeUrl);
+  const siteUrl = opts.siteUrl.replace(/\/+$/, '');
   const subject = escapeHtml(content.subject.trim());
   const preview = (content.previewText ?? '').trim();
 
   const body: string[] = [];
   if (content.heroImageUrl?.trim()) {
-    body.push(img(content.heroImageUrl, content.heroImageAlt ?? '', CONTAINER));
+    body.push(img(content.heroImageUrl, content.heroImageAlt ?? '', CONTAINER, '', siteUrl));
   }
   if (content.title?.trim()) {
     body.push(
@@ -381,14 +388,14 @@ export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOpt
 
   let rowIndex = 0;
   for (const s of content.sections ?? []) {
-    const html = section(s, rowIndex);
+    const html = section(s, rowIndex, siteUrl);
     if ((s.kind ?? 'row') === 'row') rowIndex += 1;
     if (html) body.push(html);
   }
   if (content.ctaLabel?.trim() && content.ctaUrl?.trim()) {
     body.push(spacer(8), button(content.ctaLabel, content.ctaUrl), spacer(16));
   }
-  body.push(signoffBlock(content));
+  body.push(signoffBlock(content, siteUrl));
   body.push(footer(content, unsubscribeUrl));
 
   // Preheader padding keeps clients from pulling body copy into the inbox preview.
