@@ -275,6 +275,15 @@ export default function SectionEditor({
               onChange={(e) => onChange(index, { gallery: e.target.value.split('\n') })}
             />
           </label>
+          <label>
+            full-width photos under the grid (landscape shots), one link per line
+            <textarea
+              rows={2}
+              value={(section.galleryWide ?? []).join('\n')}
+              disabled={disabled}
+              onChange={(e) => onChange(index, { galleryWide: e.target.value.split('\n') })}
+            />
+          </label>
           <div className="admin-gallery-upload">
             <button
               type="button"

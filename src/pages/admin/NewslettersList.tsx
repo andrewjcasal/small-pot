@@ -24,7 +24,7 @@ function contentFrom(n: Newsletter): NewsletterContent {
     intro: n.intro,
     sections: n.sections.map((s) => ({
       ...s,
-      gallery: s.gallery ? [...s.gallery] : s.gallery,
+      gallery: s.gallery ? [...s.gallery] : s.gallery, galleryWide: s.galleryWide ? [...s.galleryWide] : s.galleryWide,
       columns: s.columns ? s.columns.map((c) => ({ ...c })) : s.columns,
       iconLinks: s.iconLinks ? s.iconLinks.map((l) => ({ ...l })) : s.iconLinks,
     })),

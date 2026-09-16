@@ -55,6 +55,8 @@ export interface NewsletterSection {
   iconLinks?: NewsletterIconLink[];
   /** Photo URLs for a gallery section, two per row. */
   gallery?: string[];
+  /** Photo URLs shown full width, one per row, under the grid (landscape shots). */
+  galleryWide?: string[];
   /** Blocks for a columns section, two per row. */
   columns?: NewsletterColumn[];
 }
@@ -262,9 +264,10 @@ function band(s: NewsletterSection, siteUrl: string): string {
 }
 
 /** Two-column photo grid. Stays two-up on phones. */
-function gallery(urls: string[], siteUrl: string): string {
+function gallery(urls: string[], siteUrl: string, wide: string[] = []): string {
   const clean = urls.map((u) => u.trim()).filter(Boolean);
-  if (!clean.length) return '';
+  const cleanWide = wide.map((u) => u.trim()).filter(Boolean);
+  if (!clean.length && !cleanWide.length) return '';
   const cellWidth = Math.floor((CONTAINER - 48 - 16) / 2);
   const rows: string[] = [];
   for (let i = 0; i < clean.length; i += 2) {
@@ -277,10 +280,14 @@ function gallery(urls: string[], siteUrl: string): string {
     if (pair.length === 1) cells.push(`<td width="50%" style="width:50%;padding:0 0 16px 8px;"></td>`);
     rows.push(`<tr>${cells.join('')}</tr>`);
   }
+  const wideRows = cleanWide
+    .map((u) => `<div style="margin:0 0 16px;">${img(u, '', CONTAINER - 48, '', siteUrl)}</div>`)
+    .join('');
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0;">` +
     `<tr><td class="sp-pad" style="padding:8px 24px;">` +
-    `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>${rows.join('')}</tbody></table>` +
+    (rows.length ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tbody>${rows.join('')}</tbody></table>` : '') +
+    wideRows +
     `</td></tr></table>`
   );
 }
@@ -353,7 +360,7 @@ function section(s: NewsletterSection, rowIndex: number, siteUrl: string): strin
     case 'band':
       return band(s, siteUrl);
     case 'gallery':
-      return gallery(s.gallery ?? [], siteUrl);
+      return gallery(s.gallery ?? [], siteUrl, s.galleryWide ?? []);
     case 'columns':
       return columns(s.columns ?? []);
     default:
@@ -566,7 +573,7 @@ export function blankSection(kind: SectionKind = 'row'): NewsletterSection {
     case 'band':
       return { kind, heading: '', imageUrl: '' };
     case 'gallery':
-      return { kind, gallery: [] };
+      return { kind, gallery: [], galleryWide: [] };
     case 'columns':
       return { kind, columns: [{ iconUrl: '', iconHeight: 56, heading: '', body: '', linkUrl: '' }] };
     default:
