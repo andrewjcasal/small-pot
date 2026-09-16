@@ -244,15 +244,24 @@ export default function SectionEditor({
       )}
 
       {kind === 'band' && (
-        <label>
-          title
-          <input
-            type="text"
-            value={section.heading ?? ''}
+        <>
+          <label>
+            title
+            <input
+              type="text"
+              value={section.heading ?? ''}
+              disabled={disabled}
+              onChange={(e) => onChange(index, { heading: e.target.value })}
+            />
+          </label>
+          <ImageField
+            label="band image (optional, replaces the title text; 1200px wide from canva keeps your lettering and holds up in dark mode)"
+            value={section.imageUrl ?? ''}
             disabled={disabled}
-            onChange={(e) => onChange(index, { heading: e.target.value })}
+            onChange={(url) => onChange(index, { imageUrl: url })}
+            onUnauthorized={onUnauthorized}
           />
-        </label>
+        </>
       )}
 
       {kind === 'gallery' && (

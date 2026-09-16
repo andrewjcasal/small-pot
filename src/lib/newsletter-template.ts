@@ -41,6 +41,7 @@ export interface NewsletterSection {
   subheading?: string;
   /** Plain text. A blank line starts a new paragraph. */
   body?: string;
+  /** Row photo, or for a band the band image (Lisa's Canva title bar) which replaces the text. */
   imageUrl?: string;
   imageAlt?: string;
   /** Which side the photo sits on in a row on desktop. "auto" alternates, starting on the left. */
@@ -169,7 +170,7 @@ function button(label: string, url: string): string {
     `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:4px auto 0;">` +
     `<tr><td align="center" bgcolor="${COLORS.copper}" style="${bg(COLORS.copper)}border-radius:11px;">` +
     `<a href="${safeUrl(url)}" style="display:inline-block;padding:9px 20px;font-family:${FONT};font-size:16px;line-height:1.2;font-weight:700;color:${COLORS.ink};text-decoration:none;border-radius:11px;">` +
-    `${blend(escapeHtml(label.trim()))}</a></td></tr></table>`
+    `${escapeHtml(label.trim())}</a></td></tr></table>`
   );
 }
 
@@ -234,14 +235,26 @@ function row(s: NewsletterSection, index: number, siteUrl: string): string {
   );
 }
 
-/** Big uppercase title bar in the lighter olive. */
-function band(s: NewsletterSection): string {
+/**
+ * Big uppercase title bar in the lighter olive. When the band has an image
+ * (Lisa makes these in Canva), the image is the band: it keeps her exact
+ * lettering and, unlike text, Gmail's dark mode cannot recolour it. The text
+ * version is the fallback; its dark type inverts to light in Gmail's iOS dark
+ * mode, and the blend trick cannot fix dark text, so it stays unwrapped.
+ */
+function band(s: NewsletterSection, siteUrl: string): string {
   const label = (s.heading ?? '').trim();
+  if (s.imageUrl?.trim()) {
+    return (
+      `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0;">` +
+      `<tr><td style="padding:0;">${img(s.imageUrl, label || s.imageAlt || '', CONTAINER, '', siteUrl)}</td></tr></table>`
+    );
+  }
   if (!label) return '';
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0;">` +
     `<tr><td class="sp-pad" bgcolor="${COLORS.band}" style="${bg(COLORS.band)}padding:22px 24px;">` +
-    blend(`<div class="sp-band" style="font-family:${FONT};font-size:56px;line-height:0.95;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;color:${COLORS.bandText};text-align:center;">${escapeHtml(label)}</div>`) +
+    `<div class="sp-band" style="font-family:${FONT};font-size:56px;line-height:0.95;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;color:${COLORS.bandText};text-align:center;">${escapeHtml(label)}</div>` +
     `</td></tr></table>`
   );
 }
@@ -322,7 +335,7 @@ function columns(items: NewsletterColumn[]): string {
 function section(s: NewsletterSection, rowIndex: number, siteUrl: string): string {
   switch (s.kind ?? 'row') {
     case 'band':
-      return band(s);
+      return band(s, siteUrl);
     case 'gallery':
       return gallery(s.gallery ?? [], siteUrl);
     case 'columns':
@@ -533,7 +546,7 @@ export function blankNewsletterContent(): NewsletterContent {
 export function blankSection(kind: SectionKind = 'row'): NewsletterSection {
   switch (kind) {
     case 'band':
-      return { kind, heading: '' };
+      return { kind, heading: '', imageUrl: '' };
     case 'gallery':
       return { kind, gallery: [] };
     case 'columns':
