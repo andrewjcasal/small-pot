@@ -22,7 +22,7 @@ const classLocations: ClassLocation[] = [
   { label: 'Bedford', url: 'https://members.bowercenter.org/classes/Search?term=stained+glass' },
   {
     label: 'Lynchburg',
-    url: 'https://valynchburgweb.myvscloud.com/webtrac/web/search.html?Action=Start&SubAction=&_csrf_token=Pq0W736Y0G6V3R2Q1B3E2L4R5S604V54085N4L5O6H165T5P5Y6D734R4P5B4J0B724Q6L5J065I4Q6G5S045E3I6N6K6S5V4S6O550J5W4G5D4X6J005S4A6J04584Q5B&keyword=&subtype=Stained+Glass&primarycode=&spotsavailable=&beginmonth=&endmonth=&age=&grade=&registrationevent=&keywordoption=Match+One&instructor=&daysofweek=&dayoption=All&timeblock=&gender=&bydayonly=No&beginyear=&season=&showwithavailable=No&display=Detail&module=AR&multiselectlist_value=&arwebsearch_buttonsearch=yes',
+    url: 'https://valynchburgweb.myvscloud.com/webtrac/web/search.html?Action=Start&SubAction=&_csrf_token=UT0V1B0R0G6U282X3C342L3H5R4U4Y54045O615756726U4I6N4V194O646Q4S1C5N5Z5D69026T5P6D55726Y3U6Q51185Q4L6O58165Q5S544S075J5V5M58085H4K5B&primarycode=23620&keyword=&subtype=&location=&spotsavailable=&endmonth=&age=&grade=&registrationevent=&keywordoption=Match+One&instructor=&daysofweek=&dayoption=All&timeblock=&gender=&bydayonly=No&beginyear=&season=&showwithavailable=No&display=Detail&module=AR&multiselectlist_value=&arwebsearch_buttonsearch=yes',
   },
   { label: 'Powhatan', url: 'https://wmcacc.org/classes-events' },
 ];
