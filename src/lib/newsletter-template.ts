@@ -59,6 +59,8 @@ export interface NewsletterSection {
   galleryWide?: string[];
   /** Blocks for a columns section, two per row. */
   columns?: NewsletterColumn[];
+  /** Desktop only: minimum height in px for every card body, so both pairs of cards match. */
+  columnsMinHeight?: number;
 }
 
 export interface NewsletterContent {
@@ -297,9 +299,10 @@ function gallery(urls: string[], siteUrl: string, wide: string[] = []): string {
  * is a copper header holding the title, then a lighter-copper body with the
  * description and the icon under it. Cream text throughout.
  */
-function columns(items: NewsletterColumn[]): string {
+function columns(items: NewsletterColumn[], minHeight = 0): string {
   const clean = items.filter((c) => (c.heading ?? '').trim() || (c.body ?? '').trim());
   if (!clean.length) return '';
+  const mh = Math.min(600, Math.max(0, Math.round(Number(minHeight) || 0)));
   // Each pair of cards is ONE table with two rows (headers, then bodies) and a
   // transparent gap column, so both cards in a pair are always the same height.
   const headerCell = (c: NewsletterColumn, width = '48%'): string => {
@@ -312,13 +315,15 @@ function columns(items: NewsletterColumn[]): string {
       blend(`<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p>`) + `</td>`
     );
   };
-  const bodyCell = (c: NewsletterColumn, width = '48%'): string => {
+  const bodyCell = (c: NewsletterColumn, width = '48%', fixed = false): string => {
+    const heightAttr = fixed && mh ? ` height="${mh}"` : '';
+    const heightStyle = fixed && mh ? `height:${mh}px;` : '';
     const h = Math.min(160, Math.max(24, Math.round(Number(c.iconHeight) || 56)));
     const icon = c.iconUrl?.trim()
       ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="${h}" style="display:block;height:${h}px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
       : '';
     return (
-      `<td width="${width}" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:${width};${bg(COLORS.copperLight)}border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
+      `<td width="${width}"${heightAttr} align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:${width};${heightStyle}${bg(COLORS.copperLight)}border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
       (c.body?.trim() ? blend(paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`)) : '') +
       icon +
       `</td>`
@@ -332,7 +337,7 @@ function columns(items: NewsletterColumn[]): string {
     pairs.push(
       `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;">` +
         `<tr>${headerCell(a)}${gap}${b ? headerCell(b) : empty}</tr>` +
-        `<tr>${bodyCell(a)}${gap}${b ? bodyCell(b) : empty}</tr>` +
+        `<tr>${bodyCell(a, '48%', true)}${gap}${b ? bodyCell(b, '48%', true) : empty}</tr>` +
         `</table>`,
     );
   }
@@ -362,7 +367,7 @@ function section(s: NewsletterSection, rowIndex: number, siteUrl: string): strin
     case 'gallery':
       return gallery(s.gallery ?? [], siteUrl, s.galleryWide ?? []);
     case 'columns':
-      return columns(s.columns ?? []);
+      return columns(s.columns ?? [], s.columnsMinHeight ?? 0);
     default:
       return row(s, rowIndex, siteUrl);
   }

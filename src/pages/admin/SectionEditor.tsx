@@ -309,6 +309,17 @@ export default function SectionEditor({
 
       {kind === 'columns' && (
         <div className="admin-columns">
+          <label>
+            card body min height on desktop (px, 0 = off; set it so the two pairs of cards match)
+            <input
+              type="number"
+              min={0}
+              max={600}
+              value={section.columnsMinHeight ?? 0}
+              disabled={disabled}
+              onChange={(e) => onChange(index, { columnsMinHeight: Number(e.target.value) || 0 })}
+            />
+          </label>
           <div className="admin-column-list-head">
             <span>blocks</span>
             <button
