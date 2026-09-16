@@ -295,23 +295,23 @@ function columns(items: NewsletterColumn[]): string {
   if (!clean.length) return '';
   // Each pair of cards is ONE table with two rows (headers, then bodies) and a
   // transparent gap column, so both cards in a pair are always the same height.
-  const headerCell = (c: NewsletterColumn): string => {
+  const headerCell = (c: NewsletterColumn, width = '48%'): string => {
     const heading = escapeHtml((c.heading ?? '').trim());
     const headingHtml = c.linkUrl?.trim()
       ? `<a href="${safeUrl(c.linkUrl)}" style="color:${COLORS.cream};text-decoration:underline;">${heading}</a>`
       : heading;
     return (
-      `<td width="48%" align="center" valign="middle" bgcolor="${COLORS.copper}" style="width:48%;${bg(COLORS.copper)}border-radius:8px 8px 0 0;padding:12px 14px;">` +
+      `<td width="${width}" align="center" valign="middle" bgcolor="${COLORS.copper}" style="width:${width};${bg(COLORS.copper)}border-radius:8px 8px 0 0;padding:12px 14px;">` +
       blend(`<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p>`) + `</td>`
     );
   };
-  const bodyCell = (c: NewsletterColumn): string => {
+  const bodyCell = (c: NewsletterColumn, width = '48%'): string => {
     const h = Math.min(160, Math.max(24, Math.round(Number(c.iconHeight) || 56)));
     const icon = c.iconUrl?.trim()
       ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="${h}" style="display:block;height:${h}px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
       : '';
     return (
-      `<td width="48%" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:48%;${bg(COLORS.copperLight)}border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
+      `<td width="${width}" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:${width};${bg(COLORS.copperLight)}border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
       (c.body?.trim() ? blend(paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`)) : '') +
       icon +
       `</td>`
@@ -329,9 +329,22 @@ function columns(items: NewsletterColumn[]): string {
         `</table>`,
     );
   }
+  // On a phone each card runs full width, one under the other. The paired table
+  // above cannot stack without splitting a card from its header, so both layouts
+  // ship and the media query in the head swaps them under 620px.
+  const stacked = clean
+    .map(
+      (c) =>
+        `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px;">` +
+        `<tr>${headerCell(c, '100%')}</tr><tr>${bodyCell(c, '100%')}</tr></table>`,
+    )
+    .join('');
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0;">` +
-    `<tr><td class="sp-pad" style="padding:12px 24px;">${pairs.join('')}</td></tr></table>`
+    `<tr><td class="sp-pad" style="padding:12px 24px;">` +
+    `<div class="sp-desk">${pairs.join('')}</div>` +
+    `<!--[if !mso]><!--><div class="sp-mob" style="display:none;max-height:0;overflow:hidden;mso-hide:all;">${stacked}</div><!--<![endif]-->` +
+    `</td></tr></table>`
   );
 }
 
@@ -461,6 +474,8 @@ export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOpt
     .sp-col { display:block !important; width:100% !important; box-sizing:border-box !important; padding:10px 20px !important; }
     .sp-pad { padding-left:16px !important; padding-right:16px !important; }
     .sp-band { font-size:40px !important; }
+    .sp-desk { display:none !important; }
+    .sp-mob { display:block !important; max-height:none !important; overflow:visible !important; }
   }
 </style>
 </head>
