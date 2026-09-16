@@ -154,12 +154,22 @@ function spacer(px: number): string {
   return `<div style="height:${px}px;line-height:${px}px;font-size:${px}px;">&nbsp;</div>`;
 }
 
+/** Gmail-only blend wrappers (see the head <style>): they rebuild text colours in Gmail's iOS dark mode. Text only, never an image. */
+function blend(html: string): string {
+  return `<div class="gmail-blend-screen"><div class="gmail-blend-difference">${html}</div></div>`;
+}
+
+/** A background colour plus a same-colour gradient, which Gmail's dark mode leaves alone. */
+function bg(color: string): string {
+  return `background-color:${color};background-image:linear-gradient(${color},${color});`;
+}
+
 function button(label: string, url: string): string {
   return (
     `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:4px auto 0;">` +
-    `<tr><td align="center" bgcolor="${COLORS.copper}" style="background-color:${COLORS.copper};border-radius:11px;">` +
+    `<tr><td align="center" bgcolor="${COLORS.copper}" style="${bg(COLORS.copper)}border-radius:11px;">` +
     `<a href="${safeUrl(url)}" style="display:inline-block;padding:9px 20px;font-family:${FONT};font-size:16px;line-height:1.2;font-weight:700;color:${COLORS.ink};text-decoration:none;border-radius:11px;">` +
-    `${escapeHtml(label.trim())}</a></td></tr></table>`
+    `${blend(escapeHtml(label.trim()))}</a></td></tr></table>`
   );
 }
 
@@ -192,7 +202,8 @@ function row(s: NewsletterSection, index: number, siteUrl: string): string {
     );
   }
   if (s.body?.trim()) text.push(paragraphs(s.body));
-  if (s.linkLabel?.trim() && s.linkUrl?.trim()) text.push(button(s.linkLabel, s.linkUrl));
+  const extras: string[] = [];
+  if (s.linkLabel?.trim() && s.linkUrl?.trim()) extras.push(button(s.linkLabel, s.linkUrl));
   const icons = (s.iconLinks ?? []).filter((l) => l.iconUrl?.trim() && l.url?.trim());
   if (icons.length) {
     const cells = icons
@@ -202,14 +213,14 @@ function row(s: NewsletterSection, index: number, siteUrl: string): string {
           `<img src="${safeUrl(l.iconUrl)}" alt="${escapeAttr(l.alt ?? '')}" height="44" style="display:block;height:44px;width:auto;border:0;"></a></td>`,
       )
       .join('');
-    text.push(
+    extras.push(
       `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:6px auto 0;"><tr>${cells}</tr></table>`,
     );
   }
 
   const textCell =
     `<td class="sp-col" dir="ltr" valign="middle" width="${hasImage ? '55%' : '100%'}" ` +
-    `style="width:${hasImage ? '55%' : '100%'};padding:12px 24px;">${text.join('\n')}</td>`;
+    `style="width:${hasImage ? '55%' : '100%'};padding:12px 24px;">${text.length ? blend(text.join('\n')) : ''}${extras.join('\n')}</td>`;
   const imageCell = hasImage
     ? `<td class="sp-col" dir="ltr" valign="middle" width="45%" style="width:45%;padding:12px 24px;">` +
       `${img(s.imageUrl as string, s.imageAlt ?? '', 246, 'margin:0 auto;', s.linkUrl?.trim() || siteUrl)}</td>`
@@ -229,8 +240,8 @@ function band(s: NewsletterSection): string {
   if (!label) return '';
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0;">` +
-    `<tr><td class="sp-pad" bgcolor="${COLORS.band}" style="background-color:${COLORS.band};padding:22px 24px;">` +
-    `<div class="sp-band" style="font-family:${FONT};font-size:56px;line-height:0.95;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;color:${COLORS.bandText};text-align:center;">${escapeHtml(label)}</div>` +
+    `<tr><td class="sp-pad" bgcolor="${COLORS.band}" style="${bg(COLORS.band)}padding:22px 24px;">` +
+    blend(`<div class="sp-band" style="font-family:${FONT};font-size:56px;line-height:0.95;font-weight:900;letter-spacing:-0.02em;text-transform:uppercase;color:${COLORS.bandText};text-align:center;">${escapeHtml(label)}</div>`) +
     `</td></tr></table>`
   );
 }
@@ -275,8 +286,8 @@ function columns(items: NewsletterColumn[]): string {
       ? `<a href="${safeUrl(c.linkUrl)}" style="color:${COLORS.cream};text-decoration:underline;">${heading}</a>`
       : heading;
     return (
-      `<td width="48%" align="center" valign="middle" bgcolor="${COLORS.copper}" style="width:48%;background-color:${COLORS.copper};border-radius:8px 8px 0 0;padding:12px 14px;">` +
-      `<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p></td>`
+      `<td width="48%" align="center" valign="middle" bgcolor="${COLORS.copper}" style="width:48%;${bg(COLORS.copper)}border-radius:8px 8px 0 0;padding:12px 14px;">` +
+      blend(`<p style="margin:0;font-family:${FONT};font-size:18px;line-height:1.2;font-weight:700;color:${COLORS.cream};text-align:center;">${headingHtml}</p>`) + `</td>`
     );
   };
   const bodyCell = (c: NewsletterColumn): string => {
@@ -284,8 +295,8 @@ function columns(items: NewsletterColumn[]): string {
       ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="56" style="display:block;height:56px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
       : '';
     return (
-      `<td width="48%" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:48%;background-color:${COLORS.copperLight};border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
-      (c.body?.trim() ? paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`) : '') +
+      `<td width="48%" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:48%;${bg(COLORS.copperLight)}border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
+      (c.body?.trim() ? blend(paragraphs(c.body, `margin:0 0 12px;font-family:${FONT};font-size:16px;line-height:1.4;color:${COLORS.cream};text-align:center;`)) : '') +
       icon +
       `</td>`
     );
@@ -338,7 +349,7 @@ function signoffBlock(content: NewsletterContent, siteUrl: string): string {
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 0;">` +
     `<tr><td class="sp-pad" style="padding:12px 24px 28px;">` +
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${picture}` +
-    `<td valign="middle" style="padding:0;">${text}</td></tr></table>` +
+    `<td valign="middle" style="padding:0;">${blend(text)}</td></tr></table>` +
     `</td></tr></table>`
   );
 }
@@ -350,12 +361,14 @@ function footer(content: NewsletterContent, unsubscribeUrl: string): string {
   const small = `font-family:${FONT};font-size:13px;line-height:1.45;color:${COLORS.cream};text-align:center;`;
   return (
     `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">` +
-    `<tr><td class="sp-pad" bgcolor="${COLORS.copper}" style="background-color:${COLORS.copper};padding:22px 24px 24px;">` +
+    `<tr><td class="sp-pad" bgcolor="${COLORS.copper}" style="${bg(COLORS.copper)}padding:22px 24px 24px;">` +
+    `<div class="gmail-blend-screen"><div class="gmail-blend-difference">` +
     `<p style="margin:0;font-family:${FONT};font-size:15px;line-height:1.4;font-weight:700;color:${COLORS.cream};text-align:center;">${line1}</p>` +
     `<p style="margin:0 0 14px;font-family:${FONT};font-size:15px;line-height:1.4;color:${COLORS.cream};text-align:center;">${line2}</p>` +
     `<p style="margin:0;${small}">&copy; ${year} Small Pot Stained Glass. All rights reserved.</p>` +
     `<p style="margin:0;${small}">You are receiving this newsletter because you signed up for our updates. ` +
     `<a href="${unsubscribeUrl}" style="color:${COLORS.cream};text-decoration:underline;">Unsubscribe</a> any time.</p>` +
+    `</div></div>` +
     `</td></tr></table>`
   );
 }
@@ -373,14 +386,14 @@ export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOpt
   if (content.title?.trim()) {
     body.push(
       `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="sp-pad" style="padding:24px 24px 0;">` +
-        `<p style="margin:0;font-family:${FONT};font-size:26px;line-height:1.2;font-weight:700;letter-spacing:-0.02em;color:${COLORS.cream};text-align:center;">${escapeHtml(content.title.trim())}</p>` +
+        blend(`<p style="margin:0;font-family:${FONT};font-size:26px;line-height:1.2;font-weight:700;letter-spacing:-0.02em;color:${COLORS.cream};text-align:center;">${escapeHtml(content.title.trim())}</p>`) +
         `</td></tr></table>`,
     );
   }
   if (content.intro?.trim()) {
     body.push(
       `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="sp-pad" style="padding:20px 32px 6px;">` +
-        paragraphs(content.intro) +
+        blend(paragraphs(content.intro)) +
         `</td></tr></table>`,
     );
   }
@@ -442,9 +455,7 @@ ${preheader}
 <!--[if mso]><table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <table role="presentation" class="sp-container" width="${CONTAINER}" cellpadding="0" cellspacing="0" border="0" bgcolor="${COLORS.olive}" style="width:${CONTAINER}px;max-width:100%;background-color:${COLORS.olive};">
 <tr><td style="padding:0;background:${COLORS.olive};background-image:linear-gradient(${COLORS.olive},${COLORS.olive});color:${COLORS.cream};">
-<div class="gmail-blend-screen"><div class="gmail-blend-difference">
 ${body.join('\n')}
-</div></div>
 </td></tr>
 </table>
 <!--[if mso]></td></tr></table><![endif]-->
