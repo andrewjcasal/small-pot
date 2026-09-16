@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Paintbrush, ShoppingBag, Heart, Star } from 'lucide-react';
+import { Instagram, Paintbrush, Wrench, Heart, Star } from 'lucide-react';
 import './Links.css';
 
 type LinkItem =
@@ -58,10 +58,10 @@ const links: LinkItem[] = [
   },
   {
     kind: 'link',
-    label: 'beginner kit',
-    url: 'https://www.amazon.com/hz/wishlist/ls/33G07IIHZPN4T?ref_=wl_share',
-    icon: <ShoppingBag className="link-icon" />,
-    isExternal: true,
+    label: 'tools & materials',
+    url: '/tools',
+    icon: <Wrench className="link-icon" />,
+    isExternal: false,
   },
   {
     kind: 'link',
