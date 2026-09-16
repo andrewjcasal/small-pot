@@ -257,14 +257,16 @@ export const toolGroups: ToolGroup[] = [
     title: 'Finishing',
     items: [
       {
-        name: '18 Gauge Tinned Wire, 1/4 lb',
+        name: '18 Gauge Tinned Wire',
+        subtitle: '1/4 lb',
         slug: 'tinned-wire',
         price: 10.95,
         seller: 'anything',
         url: `${AISG}/finishing/hooksClipsChain.html#wire`,
       },
       {
-        name: 'Jewelry Making Pliers, 3 piece',
+        name: 'Jewelry Making Pliers',
+        subtitle: '3 piece',
         slug: 'jewelry-pliers',
         price: 8.49,
         seller: 'amazon',
