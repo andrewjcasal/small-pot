@@ -419,6 +419,13 @@ export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOpt
   table { border-collapse:collapse; mso-table-lspace:0; mso-table-rspace:0; }
   img { border:0; display:block; height:auto; line-height:100%; outline:none; text-decoration:none; -ms-interpolation-mode:bicubic; }
   a { color:${COLORS.cream}; }
+  /* Gmail's iOS app fully inverts colours in dark mode (the olive turned pale green,
+     the cream text went dark). Gmail rewrites the doctype into a <u> element, so
+     "u + .body" matches only there. The gradient on the container keeps the olive,
+     and these two blend layers rebuild the original text colours on top of it.
+     Technique: Rémi Parmentier, "Fixing Gmail's dark mode issues with CSS blend modes". */
+  u + .body .gmail-blend-screen { background:#000000; mix-blend-mode:screen; }
+  u + .body .gmail-blend-difference { background:#000000; mix-blend-mode:difference; }
   @media only screen and (max-width:620px) {
     .sp-outer { padding:0 !important; }
     .sp-container { width:100% !important; }
@@ -428,14 +435,16 @@ export function renderNewsletterHtml(content: NewsletterContent, opts: RenderOpt
   }
 </style>
 </head>
-<body style="margin:0;padding:0;background-color:${COLORS.page};">
+<body class="body" style="margin:0;padding:0;background-color:${COLORS.page};">
 ${preheader}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:${COLORS.page};">
 <tr><td align="center" class="sp-outer" style="padding:20px 8px;">
 <!--[if mso]><table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <table role="presentation" class="sp-container" width="${CONTAINER}" cellpadding="0" cellspacing="0" border="0" bgcolor="${COLORS.olive}" style="width:${CONTAINER}px;max-width:100%;background-color:${COLORS.olive};">
-<tr><td style="padding:0;">
+<tr><td style="padding:0;background:${COLORS.olive};background-image:linear-gradient(${COLORS.olive},${COLORS.olive});color:${COLORS.cream};">
+<div class="gmail-blend-screen"><div class="gmail-blend-difference">
 ${body.join('\n')}
+</div></div>
 </td></tr>
 </table>
 <!--[if mso]></td></tr></table><![endif]-->
