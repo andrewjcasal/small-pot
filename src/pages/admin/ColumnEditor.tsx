@@ -65,6 +65,17 @@ export default function ColumnEditor({ column, index, disabled, onChange, onRemo
           onChange={(e) => onChange(index, { linkUrl: e.target.value })}
         />
       </label>
+      <label>
+        icon height (px, 56 is the default; raise it for a tall, narrow drawing)
+        <input
+          type="number"
+          min={24}
+          max={160}
+          value={column.iconHeight ?? 56}
+          disabled={disabled}
+          onChange={(e) => onChange(index, { iconHeight: Number(e.target.value) || 56 })}
+        />
+      </label>
     </div>
   );
 }

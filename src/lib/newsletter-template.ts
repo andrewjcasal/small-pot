@@ -21,6 +21,8 @@ export type SectionKind = 'row' | 'band' | 'gallery' | 'columns';
 
 export interface NewsletterColumn {
   iconUrl?: string;
+  /** Rendered height of the icon in px. Default 56; raise it for tall, narrow drawings. */
+  iconHeight?: number;
   heading: string;
   body: string;
   linkUrl?: string;
@@ -304,8 +306,9 @@ function columns(items: NewsletterColumn[]): string {
     );
   };
   const bodyCell = (c: NewsletterColumn): string => {
+    const h = Math.min(160, Math.max(24, Math.round(Number(c.iconHeight) || 56)));
     const icon = c.iconUrl?.trim()
-      ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="56" style="display:block;height:56px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
+      ? `<img src="${safeUrl(c.iconUrl)}" alt="" height="${h}" style="display:block;height:${h}px;width:auto;max-width:100%;border:0;margin:4px auto 0;">`
       : '';
     return (
       `<td width="48%" align="center" valign="top" bgcolor="${COLORS.copperLight}" style="width:48%;${bg(COLORS.copperLight)}border-radius:0 0 8px 8px;padding:14px 14px 16px;">` +
@@ -550,7 +553,7 @@ export function blankSection(kind: SectionKind = 'row'): NewsletterSection {
     case 'gallery':
       return { kind, gallery: [] };
     case 'columns':
-      return { kind, columns: [{ iconUrl: '', heading: '', body: '', linkUrl: '' }] };
+      return { kind, columns: [{ iconUrl: '', iconHeight: 56, heading: '', body: '', linkUrl: '' }] };
     default:
       return { kind: 'row', heading: '', subheading: '', body: '', imageUrl: '', imageAlt: '', imageSide: 'auto', linkLabel: '', linkUrl: '', iconLinks: [] };
   }
