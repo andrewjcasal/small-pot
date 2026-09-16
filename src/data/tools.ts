@@ -7,28 +7,32 @@ export const sellerLabel: Record<Seller, string> = {
   kroger: 'Kroger',
 };
 
-/** Prices below were read off each linked listing on this date, not off the sheet. */
-export const pricesCheckedOn = 'September 16, 2026';
+/** Shown in the page footer. Prices were read off each linked listing then. */
+export const pricesReviewed = 'September 2026';
+
+export interface ToolVariant {
+  label: string;
+  price: number;
+}
 
 export interface Tool {
   /** Display name, shown under the photo. */
   name: string;
+  /** Second line under the name, for items whose name is a brand. */
+  subtitle?: string;
   /** Basename of the image in /public/tools. Null when there is no photo yet. */
   slug: string | null;
-  /** Price on the linked listing when last checked. Null when unknown. */
+  /** Price on the linked listing when last reviewed. Null when unknown or when variants carry it. */
   price: number | null;
-  /** Qualifier shown after the price, e.g. a pack size or a variant. */
+  /** Qualifier shown after the price, e.g. a pack size. */
   priceNote?: string;
+  /** One line per size or option, each with its own price. */
+  variants?: ToolVariant[];
   seller: Seller | null;
   /** Null shows the item with no button. */
   url: string | null;
-  /** One-line caption from Lisa's sheet. */
+  /** One-line caption under the price. */
   note?: string;
-  /**
-   * Items sharing a key are interchangeable by preference or budget; they are
-   * listed next to each other and tagged "pick one".
-   */
-  pick?: string;
 }
 
 export interface ToolGroup {
@@ -39,10 +43,7 @@ export interface ToolGroup {
 const AISG = 'https://www.anythinginstainedglass.com';
 const amazon = (asin: string) => `https://www.amazon.com/dp/${asin}`;
 
-/**
- * Listed in the order of Lisa's sheet, which is also the grid order: the
- * "pick one" sets are already adjacent there.
- */
+/** Listed in the order of Lisa's sheet, which is also the grid order. */
 export const toolGroups: ToolGroup[] = [
   {
     title: 'Personal Protection Equipment',
@@ -53,15 +54,13 @@ export const toolGroups: ToolGroup[] = [
         price: 8.99,
         seller: 'amazon',
         url: amazon('B09GNXYWDQ'),
-        pick: 'mask',
       },
       {
         name: '3M Rugged Comfort Half Facepiece Respirator',
-        slug: null,
-        price: null,
+        slug: 'respirator',
+        price: 31.48,
         seller: 'amazon',
-        url: null,
-        pick: 'mask',
+        url: amazon('B00IF7RBS4'),
       },
       {
         name: 'Klein Tools Heat Safe Gloves, 2 pack',
@@ -69,13 +68,11 @@ export const toolGroups: ToolGroup[] = [
         price: 9.98,
         seller: 'amazon',
         url: amazon('B0C9G8PJ7Z'),
-        note: 'Large',
       },
       {
         name: 'Nitrile Gloves, 100 ct',
         slug: 'nitrile-gloves',
-        price: null,
-        priceNote: 'by size',
+        price: 7.28,
         seller: 'amazon',
         url: amazon('B0GCHC2RTL'),
       },
@@ -85,7 +82,6 @@ export const toolGroups: ToolGroup[] = [
         price: 3.35,
         seller: 'anything',
         url: `${AISG}/tools/handtools1.html`,
-        note: 'Or hardware store',
       },
     ],
   },
@@ -116,13 +112,6 @@ export const toolGroups: ToolGroup[] = [
         url: amazon('B08H8SG94Q'),
       },
       {
-        name: 'Glass',
-        slug: null,
-        price: null,
-        seller: null,
-        url: null,
-      },
-      {
         name: 'Top Tools Pistol Grip Cutter',
         slug: 'pistol-grip-cutter',
         price: 9.95,
@@ -142,7 +131,6 @@ export const toolGroups: ToolGroup[] = [
         price: 11.0,
         seller: 'anything',
         url: `${AISG}/cuttermate/cuttermatetools.html#wafflegrid`,
-        note: 'Greatly reduces cuts',
       },
     ],
   },
@@ -155,7 +143,6 @@ export const toolGroups: ToolGroup[] = [
         price: 6.99,
         seller: 'amazon',
         url: amazon('B08FRBMYKD'),
-        pick: 'cut',
       },
       {
         name: 'Knife Safe Gloves',
@@ -163,14 +150,6 @@ export const toolGroups: ToolGroup[] = [
         price: 9.99,
         seller: 'amazon',
         url: amazon('B06XBGR2L9'),
-        pick: 'cut',
-      },
-      {
-        name: 'Grinder Shield, Storage Bin, or Aquarium',
-        slug: null,
-        price: null,
-        seller: null,
-        url: null,
       },
       {
         name: 'Gryphette Grinder',
@@ -199,23 +178,30 @@ export const toolGroups: ToolGroup[] = [
         url: amazon('B0CJ8S7RRT'),
       },
       {
-        name: 'Techniglass Copper Foil Tape, 3/16 or 7/32 inch',
+        name: 'Techniglass',
+        subtitle: 'Copper Foil Tape',
         slug: 'techniglass-foil',
-        price: 5.59,
-        priceNote: '3/16 inch, 7/32 is $6.45',
+        price: null,
+        variants: [
+          { label: '3/16 inch', price: 5.59 },
+          { label: '7/32 inch', price: 6.45 },
+        ],
         seller: 'anything',
         url: `${AISG}/metals/techniglass-foil.html`,
-        note: 'Black, copper, or silver backed',
-        pick: 'foil',
+        note: 'Black, copper, silver backed',
       },
       {
-        name: 'Edco Copper Foil Tape, 3/16 or 7/32 inch',
-        slug: null,
+        name: 'Edco',
+        subtitle: 'Copper Foil Tape',
+        slug: 'edco-foil',
         price: null,
+        variants: [
+          { label: '3/16 inch', price: 9.35 },
+          { label: '7/32 inch', price: 11.0 },
+        ],
         seller: 'anything',
-        url: null,
-        note: 'Black, copper, or silver backed',
-        pick: 'foil',
+        url: `${AISG}/metals/edco-foil.html`,
+        note: 'Black, copper, silver backed',
       },
     ],
   },
@@ -264,7 +250,6 @@ export const toolGroups: ToolGroup[] = [
         price: 8.99,
         seller: 'amazon',
         url: amazon('B072148P33'),
-        note: 'Protects the table',
       },
     ],
   },
@@ -273,11 +258,10 @@ export const toolGroups: ToolGroup[] = [
     items: [
       {
         name: '18 Gauge Tinned Wire, 1/4 lb',
-        slug: null,
+        slug: 'tinned-wire',
         price: 10.95,
         seller: 'anything',
         url: `${AISG}/finishing/hooksClipsChain.html#wire`,
-        note: 'To make hooks',
       },
       {
         name: 'Jewelry Making Pliers, 3 piece',
@@ -299,23 +283,22 @@ export const toolGroups: ToolGroup[] = [
         price: 5.94,
         seller: 'amazon',
         url: amazon('B0G35M41RQ'),
-        pick: 'clean',
       },
       {
         name: "CJ's Flux Remover",
         slug: 'cjs-flux-remover',
-        price: null,
+        price: 6.95,
+        priceNote: '8 oz',
         seller: 'anything',
-        url: null,
-        pick: 'clean',
+        url: `${AISG}/chemicals/cleaners.html`,
       },
       {
         name: 'Kwik Clean',
         slug: 'kwik-clean',
-        price: null,
+        price: 11.49,
+        priceNote: '16 oz',
         seller: 'anything',
-        url: null,
-        pick: 'clean',
+        url: `${AISG}/chemicals/cleaners.html`,
       },
       {
         name: 'Curved Kelly Forceps',
@@ -323,7 +306,6 @@ export const toolGroups: ToolGroup[] = [
         price: 5.53,
         seller: 'amazon',
         url: amazon('B00GGAAPD0'),
-        note: 'For adding hooks',
       },
       {
         name: 'Fishing Line',
@@ -331,8 +313,6 @@ export const toolGroups: ToolGroup[] = [
         price: 10.99,
         seller: 'amazon',
         url: amazon('B00144B7SK'),
-        note: 'To hang',
-        pick: 'hang',
       },
       {
         name: 'Light Box Chain or Jack Chain',
@@ -340,8 +320,6 @@ export const toolGroups: ToolGroup[] = [
         price: null,
         seller: 'anything',
         url: `${AISG}/finishing/hooksClipsChain.html`,
-        note: 'To hang',
-        pick: 'hang',
       },
       {
         name: 'Heavy Duty Scouring Sponges',
@@ -353,10 +331,10 @@ export const toolGroups: ToolGroup[] = [
       },
       {
         name: 'Isopropyl Alcohol, 16 oz',
-        slug: null,
-        price: 2.99,
+        slug: 'isopropyl-alcohol',
+        price: 2.29,
         seller: 'kroger',
-        url: null,
+        url: 'https://www.kroger.com/p/kroger-70-isopropyl-alcohol-antiseptic/0001111079450',
       },
       {
         name: 'Howard Feed-N-Wax, 8 oz',
@@ -364,7 +342,6 @@ export const toolGroups: ToolGroup[] = [
         price: 6.65,
         seller: 'anything',
         url: `${AISG}/chemicals/cleaners.html`,
-        pick: 'polish',
       },
       {
         name: 'Liva Glass Polish',
@@ -372,7 +349,6 @@ export const toolGroups: ToolGroup[] = [
         price: 18.95,
         seller: 'anything',
         url: `${AISG}/chemicals/cleaners.html`,
-        pick: 'polish',
       },
     ],
   },

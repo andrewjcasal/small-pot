@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
-import { toolGroups, sellerLabel, pricesCheckedOn, type Tool } from '../data/tools';
+import { toolGroups, sellerLabel, pricesReviewed, type Tool } from '../data/tools';
 import './Tools.css';
 
 function formatPrice(price: number) {
@@ -22,7 +22,7 @@ function ToolCard({ tool }: { tool: Tool }) {
   );
 
   return (
-    <div className={tool.pick ? 'tool-card is-pick' : 'tool-card'}>
+    <div className="tool-card">
       {tool.url ? (
         <a
           className="tool-photo"
@@ -37,18 +37,22 @@ function ToolCard({ tool }: { tool: Tool }) {
         <div className="tool-photo">{photo}</div>
       )}
 
-      {tool.pick && <span className="tool-pick">pick one</span>}
-
       <h3 className="tool-name">{tool.name}</h3>
 
-      {tool.price !== null ? (
+      {tool.subtitle && <p className="tool-subtitle">{tool.subtitle}</p>}
+
+      {tool.variants?.map((v) => (
+        <p key={v.label} className="tool-price">
+          {v.label}, about {formatPrice(v.price)}
+        </p>
+      ))}
+
+      {tool.price !== null && (
         <p className="tool-price">
           about {formatPrice(tool.price)}
           {tool.priceNote && <span className="tool-price-note">, {tool.priceNote}</span>}
         </p>
-      ) : tool.priceNote ? (
-        <p className="tool-price">price {tool.priceNote}</p>
-      ) : null}
+      )}
 
       {tool.note && <p className="tool-note">{tool.note}</p>}
 
@@ -87,14 +91,14 @@ export default function Tools() {
             <h2 className="tools-section-title">{group.title}</h2>
             <div className="tools-grid">
               {group.items.map((tool) => (
-                <ToolCard key={tool.name} tool={tool} />
+                <ToolCard key={tool.name + (tool.subtitle ?? '')} tool={tool} />
               ))}
             </div>
           </section>
         ))}
 
         <p className="tools-footnote">
-          prices checked {pricesCheckedOn}. they move, so the link has the current one.
+          prices reviewed {pricesReviewed}. click the link to see current price.
         </p>
       </div>
     </div>
