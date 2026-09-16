@@ -209,14 +209,14 @@ export const toolGroups: ToolGroup[] = [
     title: 'Soldering',
     items: [
       {
-        name: 'Amerway 60/40 Solder',
+        name: '60/40 Solder',
         slug: 'amerway-solder',
         price: 23.95,
         seller: 'anything',
         url: `${AISG}/metals/solder.html`,
       },
       {
-        name: "Amerway Tiger's Eye Gel Flux",
+        name: "Tiger's Eye Gel Flux",
         slug: 'tigers-eye-flux',
         price: 7.95,
         seller: 'anything',

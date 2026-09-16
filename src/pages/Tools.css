@@ -126,9 +126,10 @@ a.tool-photo:focus-visible {
   inset: 0;
   width: 100%;
   height: 100%;
-  /* Mixed aspect ratios: show each product whole, edge to edge, no zoom. */
+  /* Mixed aspect ratios: show each product whole, with a little breathing room. */
   object-fit: contain;
   object-position: center;
+  padding: 0.5rem;
 }
 
 /* An item with no photo on file yet. */
