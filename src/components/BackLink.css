@@ -1,0 +1,23 @@
+/* Sits in the top-left corner of a page header that has position: relative
+   and padding-top: 2.5rem to make room for it. Sized as on /tools. */
+.page-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+  color: var(--color-text-secondary);
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.page-back:hover {
+  color: var(--color-text);
+}
+
+.page-back-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}

@@ -24,7 +24,7 @@ export interface Tool {
   slug: string | null;
   /** Price on the linked listing when last reviewed. Null when unknown or when variants carry it. */
   price: number | null;
-  /** Qualifier shown after the price, e.g. a pack size. */
+  /** Quantity or size, shown after the price: "about $7.28, 100 ct". Never in the name. */
   priceNote?: string;
   /** One line per size or option, each with its own price. */
   variants?: ToolVariant[];
@@ -63,16 +63,18 @@ export const toolGroups: ToolGroup[] = [
         url: amazon('B00IF7RBS4'),
       },
       {
-        name: 'Klein Tools Heat Safe Gloves, 2 pack',
+        name: 'Klein Tools Heat Safe Gloves',
         slug: 'klein-heat-safe-gloves',
         price: 9.98,
+        priceNote: '2 pack',
         seller: 'amazon',
         url: amazon('B0C9G8PJ7Z'),
       },
       {
-        name: 'Nitrile Gloves, 100 ct',
+        name: 'Nitrile Gloves',
         slug: 'nitrile-gloves',
         price: 7.28,
+        priceNote: '100 ct',
         seller: 'amazon',
         url: amazon('B0GCHC2RTL'),
       },
@@ -105,9 +107,10 @@ export const toolGroups: ToolGroup[] = [
         url: amazon('B001AZ3KHY'),
       },
       {
-        name: 'Dust Pan, 3 pack',
+        name: 'Dust Pan',
         slug: 'dust-pan',
         price: 7.99,
+        priceNote: '3 pack',
         seller: 'amazon',
         url: amazon('B08H8SG94Q'),
       },
@@ -138,9 +141,10 @@ export const toolGroups: ToolGroup[] = [
     title: 'Grinding',
     items: [
       {
-        name: 'Finger Cots, 20 count',
+        name: 'Finger Cots',
         slug: 'finger-cots',
         price: 6.99,
+        priceNote: '20 ct',
         seller: 'amazon',
         url: amazon('B08FRBMYKD'),
       },
@@ -171,9 +175,10 @@ export const toolGroups: ToolGroup[] = [
         url: `${AISG}/tools/handtools1.html`,
       },
       {
-        name: 'Xacto Knife, 10 pack',
+        name: 'Xacto Knife',
         slug: 'xacto-knife',
         price: 9.99,
+        priceNote: '10 pack',
         seller: 'amazon',
         url: amazon('B0CJ8S7RRT'),
       },
@@ -258,17 +263,17 @@ export const toolGroups: ToolGroup[] = [
     items: [
       {
         name: '18 Gauge Tinned Wire',
-        subtitle: '1/4 lb',
         slug: 'tinned-wire',
         price: 10.95,
+        priceNote: '1/4 lb',
         seller: 'anything',
         url: `${AISG}/finishing/hooksClipsChain.html#wire`,
       },
       {
         name: 'Jewelry Making Pliers',
-        subtitle: '3 piece',
         slug: 'jewelry-pliers',
         price: 8.49,
+        priceNote: '3 piece',
         seller: 'amazon',
         url: amazon('B07ZGFK411'),
       },
@@ -280,9 +285,10 @@ export const toolGroups: ToolGroup[] = [
         url: amazon('B08CKLYGH8'),
       },
       {
-        name: 'Dawn Platinum Dish Soap, 30 oz',
+        name: 'Dawn Platinum Dish Soap',
         slug: 'dawn-platinum',
         price: 5.94,
+        priceNote: '30 oz',
         seller: 'amazon',
         url: amazon('B0G35M41RQ'),
       },
@@ -332,16 +338,18 @@ export const toolGroups: ToolGroup[] = [
         url: 'https://www.dollartree.com/scrub-buddies-heavy-duty-scouring-pads-5ct-packs/237252',
       },
       {
-        name: 'Isopropyl Alcohol, 16 oz',
+        name: 'Isopropyl Alcohol',
         slug: 'isopropyl-alcohol',
         price: 2.29,
+        priceNote: '16 oz',
         seller: 'kroger',
         url: 'https://www.kroger.com/p/kroger-70-isopropyl-alcohol-antiseptic/0001111079450',
       },
       {
-        name: 'Howard Feed-N-Wax, 8 oz',
+        name: 'Howard Feed-N-Wax',
         slug: 'howard-feed-n-wax',
         price: 6.65,
+        priceNote: '8 oz',
         seller: 'anything',
         url: `${AISG}/chemicals/cleaners.html`,
       },
@@ -358,16 +366,18 @@ export const toolGroups: ToolGroup[] = [
     title: 'Cleanup',
     items: [
       {
-        name: 'D-Lead Wipes, 150 count',
+        name: 'D-Lead Wipes',
         slug: 'd-lead-wipes',
         price: 21.48,
+        priceNote: '150 ct',
         seller: 'amazon',
         url: amazon('B07CF77Q3N'),
       },
       {
-        name: 'D-Lead Hand Soap, 8 oz',
+        name: 'D-Lead Hand Soap',
         slug: 'd-lead-handsoap',
         price: 7.49,
+        priceNote: '8 oz',
         seller: 'anything',
         url: `${AISG}/chemicals/cleaners.html`,
       },

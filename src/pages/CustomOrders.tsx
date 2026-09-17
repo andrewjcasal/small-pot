@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Heart, CheckCircle } from 'lucide-react';
+import BackLink from '../components/BackLink';
 import './CustomOrders.css';
 
 export default function CustomOrders() {
@@ -40,6 +41,7 @@ export default function CustomOrders() {
     <div className="custom-orders-page">
       <div className="custom-orders-container">
         <div className="custom-orders-header">
+          <BackLink />
           <h1>custom orders</h1>
           <p className="custom-orders-tagline">let's create something beautiful together</p>
         </div>
