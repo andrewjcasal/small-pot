@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
+import BackLink from '../components/BackLink';
 import { toolGroups, sellerLabel, pricesReviewed, type Tool } from '../data/tools';
 import './Tools.css';
 
@@ -43,14 +43,14 @@ function ToolCard({ tool }: { tool: Tool }) {
 
       {tool.variants?.map((v) => (
         <p key={v.label} className="tool-price">
-          {v.label}, about {formatPrice(v.price)}
+          about {formatPrice(v.price)}, {v.label}
         </p>
       ))}
 
       {tool.price !== null && (
         <p className="tool-price">
           about {formatPrice(tool.price)}
-          {tool.priceNote && <span className="tool-price-note">, {tool.priceNote}</span>}
+          {tool.priceNote && `, ${tool.priceNote}`}
         </p>
       )}
 
@@ -78,10 +78,7 @@ export default function Tools() {
     <div className="tools-page">
       <div className="tools-container">
         <header className="tools-header">
-          <Link to="/links" className="tools-back">
-            <ArrowLeft className="tools-back-icon" />
-            <span>back</span>
-          </Link>
+          <BackLink />
           <h1>tools &amp; materials</h1>
           <p className="tools-tagline">what i use, and where to get it</p>
         </header>

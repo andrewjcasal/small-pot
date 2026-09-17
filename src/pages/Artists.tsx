@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import BackLink from '../components/BackLink';
 import {
   artists,
   socialOrder,
@@ -79,10 +78,7 @@ export default function Artists() {
     <div className="artists-page">
       <div className="artists-container">
         <header className="artists-header">
-          <Link to="/links" className="artists-back">
-            <ArrowLeft className="artists-back-icon" />
-            <span>back</span>
-          </Link>
+          <BackLink />
           <h1>inspirational glass artists</h1>
           <p className="artists-tagline">follow to learn techniques and tricks</p>
         </header>
