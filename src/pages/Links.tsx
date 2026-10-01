@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Paintbrush, Wrench, Heart, Star } from 'lucide-react';
+import { Instagram, Paintbrush, Wrench, Heart, Star, Mail } from 'lucide-react';
+import NewsletterModal from '../components/NewsletterModal';
 import './Links.css';
 
 type LinkItem =
@@ -11,7 +12,8 @@ type LinkItem =
       icon: React.ReactNode;
       isExternal: boolean;
     }
-  | { kind: 'classes'; label: string; icon: React.ReactNode };
+  | { kind: 'classes'; label: string; icon: React.ReactNode }
+  | { kind: 'newsletter'; label: string; icon: React.ReactNode };
 
 interface ClassLocation {
   label: string;
@@ -32,6 +34,11 @@ const links: LinkItem[] = [
     kind: 'classes',
     label: 'take a class with me',
     icon: <Paintbrush className="link-icon" />,
+  },
+  {
+    kind: 'newsletter',
+    label: 'join my newsletter',
+    icon: <Mail className="link-icon" />,
   },
   {
     kind: 'link',
@@ -75,6 +82,7 @@ const links: LinkItem[] = [
 
 export default function Links() {
   const [showLocations, setShowLocations] = useState(false);
+  const [showNewsletter, setShowNewsletter] = useState(false);
 
   return (
     <div className="links-page">
@@ -87,6 +95,21 @@ export default function Links() {
 
         <div className="links-list">
           {links.map((link, index) => {
+            if (link.kind === 'newsletter') {
+              return (
+                <button
+                  key={index}
+                  type="button"
+                  className="link-button"
+                  onClick={() => setShowNewsletter(true)}
+                  aria-haspopup="dialog"
+                >
+                  {link.icon}
+                  <span>{link.label}</span>
+                </button>
+              );
+            }
+
             if (link.kind === 'classes') {
               if (!showLocations) {
                 return (
@@ -140,6 +163,8 @@ export default function Links() {
           })}
         </div>
       </div>
+
+      <NewsletterModal open={showNewsletter} onClose={() => setShowNewsletter(false)} />
     </div>
   );
 }
