@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import posthog from 'posthog-js';
+import { markSubscribed } from '../lib/newsletter';
 import './NewsletterModal.css';
 
 type Status = 'idle' | 'sending' | 'done' | 'error';
@@ -48,6 +49,7 @@ export default function NewsletterModal({ open, onClose }: Props) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'something went wrong, please try again');
       setStatus('done');
+      markSubscribed();
       posthog.capture('newsletter_subscribed');
     } catch (err) {
       setStatus('error');
@@ -80,7 +82,9 @@ export default function NewsletterModal({ open, onClose }: Props) {
             <p className="newsletter-intro">new pieces, class dates, and what i'm working on.</p>
             <form className="newsletter-form" onSubmit={handleSubmit}>
               <label>
-                <span>first name</span>
+                <span>
+                  first name <span className="newsletter-optional">(optional)</span>
+                </span>
                 <input name="name" type="text" autoComplete="given-name" maxLength={100} />
               </label>
               <label>

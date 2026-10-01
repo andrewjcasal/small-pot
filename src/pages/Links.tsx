@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Paintbrush, Wrench, Heart, Star, Mail } from 'lucide-react';
 import NewsletterModal from '../components/NewsletterModal';
+import { hasSubscribed } from '../lib/newsletter';
 import './Links.css';
 
 type LinkItem =
@@ -82,7 +83,8 @@ const links: LinkItem[] = [
 
 export default function Links() {
   const [showLocations, setShowLocations] = useState(false);
-  const [showNewsletter, setShowNewsletter] = useState(false);
+  // Pops up on load, except for people who already signed up on this browser.
+  const [showNewsletter, setShowNewsletter] = useState(() => !hasSubscribed());
 
   return (
     <div className="links-page">
